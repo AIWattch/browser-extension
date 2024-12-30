@@ -1,0 +1,1 @@
+# chatgpt-emissions-tracker
