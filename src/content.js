@@ -1,6 +1,4 @@
 // TODO: handle logged in and logged out states (if needed)
-// TODO: when scrolled up, end of output doesnt detect
-// TODO: show UI on tab load with persistent (x,y) pos
 
 const observer = new MutationObserver((mutationsList, observer) => {
   for (const mutation of mutationsList) {
@@ -20,8 +18,9 @@ function outputFinished() {
   console.log('ChatGPT output finished')
 
   setTimeout(() => {
-    let inputText = document.querySelector('article:nth-last-child(2)')
-    let outputText = document.querySelector('article:last-child')
+    let allNodes = document.querySelectorAll('article')
+    let inputText = allNodes[allNodes.length - 2]
+    let outputText = allNodes[allNodes.length - 1]
     let textNodes = [inputText, outputText]
 
     const allTokens = []
@@ -47,6 +46,8 @@ function outputFinished() {
         updateUI(r)
       })
 
+    }).catch((err) => {
+      console.error(err)
     })
   }, 1000)
 }
@@ -63,14 +64,14 @@ const calcTokens = function(textNode) {
     if (msgType === 'user') msgType = 'inputTokens'
     if (msgType === 'assistant') msgType = 'outputTokens'
 
-    // TODO: get charsPerToken value here || 4
-    const charsPerToken = 4
-    const newTokens = msgLength / charsPerToken
+    getStorage('config').then((r) => {
+      const newTokens = msgLength / r.charsPerToken
 
-    getStorage('user').then((userObj) => {
-      const prevTokens = userObj[msgType]
-      const updatedTokens = prevTokens + newTokens 
-      resolve({[msgType] : updatedTokens})
+      getStorage('user').then((userObj) => {
+        const prevTokens = userObj[msgType]
+        const updatedTokens = prevTokens + newTokens 
+        resolve({[msgType] : updatedTokens})
+      })
     })
   })
 }
@@ -111,92 +112,141 @@ const calcEmissions = function(obj) {
     const inputTokens = obj["inputTokens"]
     const outputTokens = obj["outputTokens"]
 
-    // TODO: get from storage || or defaults if undefined
-    const gridFactor = 383
-    const inputFactor = 0.0000001
-    const outputFactor = 0.0000002
-    const PUE = 1.125
-
-    const totalEnergy = (inputTokens * inputFactor + outputTokens * outputFactor) * PUE
-    const totalEmissions = totalEnergy * gridFactor
-
-    obj["totalEmissions"] = totalEmissions
-    resolve(obj)
+    getStorage('config').then((r) => {
+      const totalEnergy = (inputTokens * r.inputFactor + outputTokens * r.outputFactor) * r.PUE
+      const totalEmissions = totalEnergy * r.gridFactor
+      return totalEmissions
+    }).then((r) => {
+      obj["totalEmissions"] = r 
+      resolve(obj)
+    })
   })
 }
 
-// TODO attach to UI parent div
-// use exisiting css styles light/dark mode
 function updateUI(obj) {
-
-  console.log('update UI...')
-  let elementId = Object.keys(obj)[0]
-  // TODO: change to parent div not document 
-  const checkExists = document.querySelector(`#${elementId}`)
+  let stats
+  const parentId = "stats-display"
+  const checkExists = document.querySelector(`#${parentId}`)
 
   if (checkExists) {
-    checkExists.remove()
+    stats = checkExists.querySelector('span')
+
+    getStorage('ui').then((r) => {
+      checkExists.style.top = r.yPos
+      checkExists.style.left = r.xPos
+    })
+
+    handleMouse(checkExists)
+
+  } else {
+    const parentDiv = document.createElement('div')
+    parentDiv.id = parentId 
+    stats = document.createElement('span')
+
+    getStorage('ui').then((r) => {
+      parentDiv.style.top = r.yPos
+      parentDiv.style.left = r.xPos
+    })
+
+    handleMouse(parentDiv)
+
+    parentDiv.insertAdjacentElement('afterbegin', stats)
+    document.body.insertAdjacentElement('afterbegin', parentDiv)
   }
 
-  const span = document.createElement('pre')
-  span.id = elementId
-  span.textContent = JSON.stringify(obj)
-  span.style.cssText =
-    'background-color: #424242; color: white; padding: 2px; width: 100%; box-sizing: border-box;'
-  document.body.insertAdjacentElement('afterbegin', span)
+  stats.textContent = `Input tokens: ${obj.inputTokens} \r\n`
+  stats.textContent += `Output tokens: ${obj.outputTokens} \r\n`
+  stats.textContent += `Total emissions: ${obj.totalEmissions.toString().substring(0,6)} gCO2e/kWh \r\n`
 }
 
 const initConfig = function() {
   return new Promise(function (resolve, reject) {
-    // test clear
-    //chrome.storage.local.remove('user')
+    // *** test clear
+    //chrome.storage.local.remove('ui')
+    //chrome.storage.local.clear()
 
-    // Check user values
-    getStorage('user').then((r) => {
-      console.log('User values loaded OK')
-      console.log(r)
-    }).catch((err) => {
-      if (err === "emptyKey") {
-        console.log('No user values found')
+    const storageKeys = ['ui','config','user']
 
-        const u = {}
-        u['user'] = {}
-        u['user']['inputTokens'] = 0
-        u['user']['outputTokens'] = 0
-        u['user']['totalEmissions'] = 0
+    storageKeys.forEach((value) => {
+      getStorage(value).then((r) => {
+        console.log(`${value} values loaded OK`)
+        console.log(r)
 
-        saveToStorage(u).then((s) => {
-          console.log('User values saved OK')
-        })
-      } else {
-        console.error(err)
-      }
-    })
+        if (value === 'user') {
+          updateUI(r)
+        }
+      }).catch((err) => {
+        if (err === "emptyKey") {
+          console.log(`No ${value} values found`)
 
-    // Check config values
-    getStorage('config').then((r) => {
-      console.log('Config values loaded OK')
-      console.log(r)
-    }).catch((err) => {
-      if (err === "emptyKey") {
-        console.log('No config values found')
+          const obj = {}
+          if (value === 'user') {
+            obj['user'] = {}
+            obj['user']['inputTokens'] = 0
+            obj['user']['outputTokens'] = 0
+            obj['user']['totalEmissions'] = 0
+          } else if (value === 'config') {
+            obj['config'] = {}
+            obj['config']['charsPerToken'] = 4
+            obj['config']['gridFactor'] = 383
+            obj['config']['inputFactor'] = 0.0000001
+            obj['config']['outputFactor'] = 0.0000002
+            obj['config']['PUE'] = 1.125
+          } else if (value === 'ui') {
+            obj['ui'] = {}
+            obj['ui']['xPos'] = "0px" 
+            obj['ui']['yPos'] = "80%"
+          }
 
-        const c = {}
-        c['config'] = {}
-        c['config']['charsPerToken'] = 4
-        c['config']['gridFactor'] = 383
-        c['config']['inputFactor'] = 0.0000001
-        c['config']['outputFactor'] = 0.0000002
-        c['config']['PUE'] = 1.125
-
-        saveToStorage(c).then((s) => {
-          console.log('Config values saved OK')
-        })
-      } else {
-        console.error(err)
-      }
+          saveToStorage(obj).then((s) => {
+            console.log(`${value} values saved OK`)
+          })
+        } else {
+          console.error(err)
+        }
+      })
     })
   })
 }
 
 initConfig()
+
+function handleMouse(div) {
+  let mousePosition
+  let offset = [0,0]
+  let isDown = false
+
+  div.addEventListener('mousedown', function(e) {
+    isDown = true
+    offset = [
+      div.offsetLeft - e.clientX,
+      div.offsetTop - e.clientY
+    ]
+  }, true)
+
+  document.addEventListener('mouseup', function() {
+    isDown = false
+    const obj = {}
+    obj['ui'] = {}
+    obj['ui']['xPos'] = div.style.left
+    obj['ui']['yPos'] = div.style.top
+
+    saveToStorage(obj).then((s) => {
+      console.log("ui position updated OK")
+    })
+  }, true)
+
+  document.addEventListener('mousemove', function(event) {
+    event.preventDefault()
+    if (isDown) {
+      mousePosition = {
+
+        x : event.clientX,
+        y : event.clientY
+
+      }
+      div.style.left = (mousePosition.x + offset[0]) + 'px'
+      div.style.top  = (mousePosition.y + offset[1]) + 'px'
+    }
+  }, true)
+}

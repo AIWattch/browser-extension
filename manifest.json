@@ -23,9 +23,8 @@
     {
       "run_at" : "document_idle",
       "js": ["src/content.js"],
-      "matches": [
-        "https://chatgpt.com/*"
-      ]
+      "matches": ["https://chatgpt.com/*"],
+      "css": ["src/content.css"]
     }
   ],
   "permissions": [

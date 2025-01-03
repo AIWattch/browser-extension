@@ -1,0 +1,36 @@
+html.dark {
+  #stats-display {
+    background-color: #2f2f2f; 
+    border-color: #fff;
+
+    span {
+      color: #fff;
+    }
+  }
+}
+
+html.light {
+  #stats-display {
+    background-color: #e3e3e3;
+    border-color #000;
+
+    span {
+      color: #000;
+    }
+  }
+}
+
+#stats-display {
+  position: absolute;
+  width: fit-content;
+  border-radius: 6px; 
+  padding: 6px 16px;
+  font-size: .875rem;
+  border: 1px solid;
+  cursor: pointer;
+  z-index: 999;
+
+  span {
+    white-space: pre-line;
+  }
+}
