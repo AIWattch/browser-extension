@@ -21,9 +21,13 @@
   },
   "content_scripts": [
     {
-      "run_at" : "document_idle",
-      "js": ["src/content.js"],
-      "matches": ["https://chatgpt.com/*"]
+      "run_at": "document_idle",
+      "js": [
+        "src/content.js-loader.js"
+      ],
+      "matches": [
+        "https://chatgpt.com/*"
+      ]
     }
   ],
   "permissions": [
@@ -32,5 +36,21 @@
   ],
   "host_permissions": [
     "https://chatgpt.com/*"
+  ],
+  "background": {
+    "service_worker": "service-worker-loader.js",
+    "type": "module"
+  },
+  "web_accessible_resources": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "resources": [
+        "**/*",
+        "*"
+      ],
+      "use_dynamic_url": false
+    }
   ]
 }

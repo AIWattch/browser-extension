@@ -1,5 +1,5 @@
 html.dark {
-  #stats-display {
+  #user-stats {
     background-color: #2f2f2f; 
     border-color: #fff;
 
@@ -10,7 +10,7 @@ html.dark {
 }
 
 html.light {
-  #stats-display {
+  #user-stats {
     background-color: #e3e3e3;
     border-color #000;
 
@@ -20,7 +20,7 @@ html.light {
   }
 }
 
-#stats-display {
+#user-stats {
   position: absolute;
   width: fit-content;
   border-radius: 6px; 
@@ -34,3 +34,23 @@ html.light {
     white-space: pre-line;
   }
 }
+
+/* popup styles */
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  gap: 1em;
+  font-size: 1.25em;
+
+  .stats {
+    width: fit-content;
+    white-space: pre-line;
+  }
+
+  a {
+    color: blue;
+    text-decoration: none;
+  }
+}
+

@@ -1,0 +1,6 @@
+import { createHotContext as __vite__createHotContext } from "/vendor/vite-client.js";import.meta.hot = __vite__createHotContext("/src/content.css.js");import { updateStyle as __vite__updateStyle, removeStyle as __vite__removeStyle } from "/vendor/vite-client.js"
+const __vite__id = "/home/ozi/dev/upwork/chatgpt-emissions-tracker/src/content.css"
+const __vite__css = "html.dark {\n  #user-stats {\n    background-color: #2f2f2f; \n    border-color: #fff;\n\n    span {\n      color: #fff;\n    }\n  }\n}\n\nhtml.light {\n  #user-stats {\n    background-color: #e3e3e3;\n    border-color #000;\n\n    span {\n      color: #000;\n    }\n  }\n}\n\n#user-stats {\n  position: absolute;\n  width: fit-content;\n  border-radius: 6px; \n  padding: 6px 16px;\n  font-size: .875rem;\n  border: 1px solid;\n  cursor: pointer;\n  z-index: 999;\n\n  span {\n    white-space: pre-line;\n  }\n}\n\n/* popup styles */\n.container {\n  display: flex;\n  flex-direction: column;\n  width: 250px;\n  gap: 1em;\n  font-size: 1.25em;\n\n  .stats {\n    width: fit-content;\n    white-space: pre-line;\n  }\n\n  a {\n    color: blue;\n    text-decoration: none;\n  }\n}\n\n"
+__vite__updateStyle(__vite__id, __vite__css)
+import.meta.hot.accept()
+import.meta.hot.prune(() => __vite__removeStyle(__vite__id))

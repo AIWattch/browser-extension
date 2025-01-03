@@ -1,0 +1,23 @@
+{
+  "name": "chatgpt-emissions-tracker",
+  "version": "0.0.1",
+  "description": "",
+  "homepage": "https://github.com/ozrendev/chatgpt-emissions-tracker#readme",
+  "bugs": {
+    "url": "https://github.com/ozrendev/chatgpt-emissions-tracker/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ozrendev/chatgpt-emissions-tracker.git"
+  },
+  "license": "ISC",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "@crxjs/vite-plugin": "^2.0.0-beta.29",
+    "vite": "^6.0.7"
+  }
+}

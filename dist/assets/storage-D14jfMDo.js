@@ -1,0 +1,1 @@
+const n=function(o){return new Promise(function(t,r){try{chrome.storage.local.get([o]).then(e=>{Object.keys(e).length!==0?t(e[o]):r("emptyKey")})}catch(e){console.error(e),r(e)}})},c=function(o){return new Promise(function(t,r){try{chrome.storage.local.set(o).then(e=>{t(e)})}catch(e){console.error(e),r(e)}})};export{n as g,c as s};

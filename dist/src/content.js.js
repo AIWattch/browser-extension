@@ -1,7 +1,7 @@
 // TODO: handle logged in and logged out states (if needed)
 
-import "./content.css"
-import {getStorage, saveToStorage} from "./storage"
+import "/src/content.css.js"
+import {getStorage, saveToStorage} from "/src/storage.js.js"
 
 const observer = new MutationObserver((mutationsList, observer) => {
   for (const mutation of mutationsList) {
