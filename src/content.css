@@ -12,7 +12,7 @@ html.dark {
 html.light {
   #user-stats {
     background-color: #e3e3e3;
-    border-color #000;
+    border-color: #000;
 
     span {
       color: #000;
@@ -54,3 +54,27 @@ html.light {
   }
 }
 
+/* admin page styles */
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  border: 1px solid;
+  padding: 1em;
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.config-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+}
+
+.config-item {
+  flex-grow: 1;
+}
+
+.config-value {
+  max-width: 25%;
+}

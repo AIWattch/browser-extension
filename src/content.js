@@ -1,4 +1,6 @@
 // TODO: handle logged in and logged out states (if needed)
+// TODO: prevent scientific notation for config items?
+// num.toLocaleString('fullwide', {useGrouping:false})
 
 import "./content.css"
 import {getStorage, saveToStorage} from "./storage"

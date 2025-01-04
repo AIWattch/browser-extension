@@ -2,8 +2,6 @@ import "../content.css"
 import {getStorage, saveToStorage} from "../storage"
 
 function showUserStats() {
-  console.log('show stats...')
-
   getStorage('user').then((obj) => {
     const userStats = document.querySelector('.stats')
 
