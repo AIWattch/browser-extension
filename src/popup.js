@@ -12,4 +12,7 @@ function showUserStats() {
   })
 }
 
+const infoBtn = document.querySelector('#more-info')
+infoBtn.href = chrome.runtime.getURL('./src/how-does-it-work.html')
+
 showUserStats()

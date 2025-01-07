@@ -1,0 +1,61 @@
+<h1>How does it work?</h1>
+
+AI Wattch is a Chrome extension that estimates and displays carbon emissions from ChatGPT conversations. The focus is on education and awareness about AI energy consumption.
+
+<h2>Core Implementation</h2>
+<h3>Token Counting</h3>
+<li>Character-based token estimation</li>
+<li> Real-time conversation tracking</li>
+<li> Basic approximation (configurable chars/token ratio)</li>
+
+<h3>Emissions Calculation</h3>
+Total Energy = (Input_Tokens * Input_Factor + Output_Tokens * Output_Factor) * PUE 
+<br/>
+Total Emissions = Total Energy * Grid_Factor
+<p>
+
+<h3>Configurable Parameters</h3>
+
+<b>1. Infrastructure</b>
+<li>PUE (datacenter <a href="https://en.wikipedia.org/wiki/Power_usage_effectiveness">Power Usage Effectiveness)</a></li>
+<li>Default: 1.125 - Range 1.0-2.0</li>
+<br/>
+<b>2. Energy Grid</b>
+<li>Grid Emissions Factor</li>
+<li>Default: 383 gCO2e/kWh</li>
+<li>Local: <a href="https://app.electricitymaps.com/map/72h">ElectricityMap</a></li>
+<br/>
+<b>3. Token Estimation</b>
+<li>Characters per Token</li>
+<li>Default: 4 chars/token - range (3-5)</li>
+<br/>
+<b>4. Energy Factors</b>
+<br/>
+<li>Input Token Energy (For context processing): Default: 0.0000001 kWh/token</li>
+<li>Output Token Energy (For generation processing): Default: 0.0000002 kWh/token</li>
+<p>
+<h2>Important Limitations</h2>
+<h3>Estimation Accuracy</h3>
+<li>Token count is based on character count approximation on web page using DOM method</li>
+<li>Cannot detect cached responses</li>
+<li>Simplified token energy estimations based on the <a href="https://huggingface.co/spaces/genai-impact/ecologits-calculator">ecologITs calculator</a></li>
+<br/>
+<h3>Scope Limitations</h3>
+<li>Only tracks simple text interactions</li>
+<li>Does not account for:</li>
+<li>Complex reasoning tasks (agentic)</li>
+<li>Multimodal processing</li>
+<li>Local model deployment</li>
+<li>Hardware lifecycle embodied carbon emissions</li>
+<li>Data center embodied carbon emissions</li>
+<h3>Technical Limitations</h3>
+<li>Basic token estimation</li>
+<li>Conservative energy calculations</li>
+<li>Limited to ChatGPT web interface</li>
+<li>Chrome browser only</li>
+<h3>Browser Compatibility</h3>
+<li>Chrome version tracking</li>
+<li>Minimum version requirements</li>
+<li>version compatibility logging</li>
+<h3>ChatGPT Interface compatibility</h3>
+<li>Version detection (logs)</li>
