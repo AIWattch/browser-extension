@@ -6,6 +6,10 @@ html.dark {
     span {
       color: #fff;
     }
+
+    .reset-btn {
+      filter: brightness(0) invert(1);
+    }
   }
 }
 
@@ -17,21 +21,31 @@ html.light {
     span {
       color: #000;
     }
+
+    .reset-btn {
+      filter: brightness(0) invert(0);
+    }
   }
 }
 
 #user-stats {
+  display: flex;
   position: absolute;
   width: fit-content;
   border-radius: 6px; 
   padding: 6px 16px;
   font-size: .875rem;
   border: 1px solid;
-  cursor: pointer;
   z-index: 999;
 
   span {
     white-space: pre-line;
+  }
+
+  .reset-btn {
+    height: 16px;
+    width: 16px;
+    cursor: pointer;
   }
 }
 

@@ -1,11 +1,10 @@
 {
-  "name": "ChatGPT Emissions Tracker",
+  "name": "AI Watch",
   "description": "",
   "version": "0.0.1",
   "manifest_version": 3,
   "action": {
-    "default_title": "TODO popup",
-    "default_popup": "src/popup/popup.html",
+    "default_popup": "src/popup.html",
     "default_icon": {
       "16": "assets/icons/icon16.png",
       "32": "assets/icons/icon32.png",
@@ -26,8 +25,11 @@
       "matches": ["https://chatgpt.com/*"]
     }
   ],
+  "web_accessible_resources": [{
+    "matches": ["<all_urls>"],
+    "resources": ["assets/*"]
+  }],
   "permissions": [
-    "scripting",
     "storage"
   ],
   "host_permissions": [

@@ -1,5 +1,5 @@
-import "../content.css"
-import {getStorage, saveToStorage} from "../storage"
+import "./content.css"
+import {getStorage, saveToStorage} from "./storage"
 
 function showUserStats() {
   getStorage('user').then((obj) => {
