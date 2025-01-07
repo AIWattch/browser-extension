@@ -1,8 +1,8 @@
 // TODO: prevent scientific notation for config items?
 // num.toLocaleString('fullwide', {useGrouping:false})
 
-import "./content.css"
-import {getStorage, saveToStorage} from "./storage"
+import "/src/content.css.js"
+import {getStorage, saveToStorage} from "/src/storage.js.js"
 
 const observer = new MutationObserver((mutationsList, observer) => {
   for (const mutation of mutationsList) {

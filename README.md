@@ -1,4 +1,5 @@
-# chatgpt-emissions-tracker
+# AI Watch
+A Chrome extension that tracks your emissions while using ChatGPT.
 
 ## Installation
 

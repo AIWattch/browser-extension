@@ -1,5 +1,5 @@
 {
-  "name": "AI Watch",
+  "name": "AI Wattch",
   "description": "",
   "version": "0.0.1",
   "manifest_version": 3,
@@ -20,35 +20,31 @@
   },
   "content_scripts": [
     {
-      "js": [
-        "assets/content.js-loader-B3VzEdfq.js"
-      ],
       "run_at": "document_idle",
+      "js": [
+        "src/content.js-loader.js"
+      ],
       "matches": [
         "https://chatgpt.com/*"
-      ],
-      "css": [
-        "assets/storage-DenLb-rN.css"
       ]
     }
   ],
   "web_accessible_resources": [
     {
+      "resources": [
+        "assets/*"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    },
+    {
       "matches": [
         "<all_urls>"
       ],
       "resources": [
-        "assets/*"
-      ],
-      "use_dynamic_url": false
-    },
-    {
-      "matches": [
-        "https://chatgpt.com/*"
-      ],
-      "resources": [
-        "assets/storage-D2uzPJPy.js",
-        "assets/content.js-DrwtEx_B.js"
+        "**/*",
+        "*"
       ],
       "use_dynamic_url": false
     }
@@ -58,5 +54,9 @@
   ],
   "host_permissions": [
     "https://chatgpt.com/*"
-  ]
+  ],
+  "background": {
+    "service_worker": "service-worker-loader.js",
+    "type": "module"
+  }
 }
