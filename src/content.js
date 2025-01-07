@@ -8,13 +8,16 @@ const observer = new MutationObserver((mutationsList, observer) => {
   for (const mutation of mutationsList) {
     if (mutation.type === 'childList') {
       mutation.addedNodes.forEach((e) => {
-        if (typeof e.className === "string" && e.className === "mt-3 w-full empty:hidden")  {
-          outputFinished()
-        }
         if (typeof e.className === "string" && e.className === "fixed right-4 top-8 my-2 flex max-h-[90vh] flex-col-reverse space-y-2 space-y-reverse overflow-y-auto px-2 py-4")  {
-          // TODO: remove ChatGPT from this text, pass it to outputFinished
-          console.log(e.innerText)
-          //outputFinished()
+          const outputText = e.innerText.replace("ChatGPT","")
+          const allNodes = document.querySelectorAll('article')
+          const inputText = allNodes[allNodes.length - 2]
+
+          const textNodes = []
+          textNodes.push({'type': 'inputTokens', 'content': inputText.innerText})
+          textNodes.push({'type': 'outputTokens', 'content': outputText})
+
+          outputFinished(textNodes)
         }
       })
     } 
@@ -23,55 +26,45 @@ const observer = new MutationObserver((mutationsList, observer) => {
 
 observer.observe(document.body, { childList: true, subtree: true })
 
-function outputFinished() {
+function outputFinished(textNodes) {
   console.log('ChatGPT output finished')
 
-  setTimeout(() => {
-    let allNodes = document.querySelectorAll('article')
-    let inputText = allNodes[allNodes.length - 2]
-    let outputText = allNodes[allNodes.length - 1]
-    let textNodes = [inputText, outputText]
+  const allTokens = []
+  textNodes.forEach((node) => {
+    const token = calcTokens(node)
+    allTokens.push(token)
+  })
 
-    const allTokens = []
-    textNodes.forEach((node) => {
-      const token = calcTokens(node)
-      allTokens.push(token)
+  Promise.all(allTokens).then((res) => {
+    let obj = {}
+    res.forEach((r) => {
+      let objName = Object.keys(r)[0]
+      let objValue = Object.values(r)[0]
+      obj[objName] = objValue
     })
 
-    Promise.all(allTokens).then((res) => {
-      let obj = {}
-      res.forEach((r) => {
-        let objName = Object.keys(r)[0]
-        let objValue = Object.values(r)[0]
-        obj[objName] = objValue
-      })
-
-      calcEmissions(obj).then((res) => {
-        return res
-      }).then((r) => {
-        saveToStorage({'user' : r})
-        return r
-      }).then((r) => {
-        updateUI(r)
-      })
-
-    }).catch((err) => {
-      console.error(err)
+    calcEmissions(obj).then((res) => {
+      return res
+    }).then((r) => {
+      saveToStorage({'user' : r})
+      return r
+    }).then((r) => {
+      updateUI(r)
     })
-  }, 1000)
+
+  }).catch((err) => {
+    console.error(err)
+  })
 }
 
 const calcTokens = function(textNode) {
   return new Promise(function (resolve, reject) {
 
-    let lastMsg = textNode.querySelector('.text-message')
-    let msgContent = lastMsg.textContent
-    let msgLength = lastMsg.textContent.length
-    let msgType = lastMsg.getAttribute('data-message-author-role')
+    const msgContent = textNode.content
+    const msgLength = textNode.content.length
+    const msgType = textNode.type 
 
     let prevTokens = 0
-    if (msgType === 'user') msgType = 'inputTokens'
-    if (msgType === 'assistant') msgType = 'outputTokens'
 
     getStorage('config').then((r) => {
       const newTokens = msgLength / r.charsPerToken

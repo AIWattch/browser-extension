@@ -20,31 +20,35 @@
   },
   "content_scripts": [
     {
-      "run_at": "document_idle",
       "js": [
-        "src/content.js-loader.js"
+        "assets/content.js-loader-B3VzEdfq.js"
       ],
+      "run_at": "document_idle",
       "matches": [
         "https://chatgpt.com/*"
+      ],
+      "css": [
+        "assets/storage-DenLb-rN.css"
       ]
     }
   ],
   "web_accessible_resources": [
     {
+      "matches": [
+        "<all_urls>"
+      ],
       "resources": [
         "assets/*"
       ],
-      "matches": [
-        "<all_urls>"
-      ]
+      "use_dynamic_url": false
     },
     {
       "matches": [
-        "<all_urls>"
+        "https://chatgpt.com/*"
       ],
       "resources": [
-        "**/*",
-        "*"
+        "assets/storage-D2uzPJPy.js",
+        "assets/content.js-DrwtEx_B.js"
       ],
       "use_dynamic_url": false
     }
@@ -54,9 +58,5 @@
   ],
   "host_permissions": [
     "https://chatgpt.com/*"
-  ],
-  "background": {
-    "service_worker": "service-worker-loader.js",
-    "type": "module"
-  }
+  ]
 }

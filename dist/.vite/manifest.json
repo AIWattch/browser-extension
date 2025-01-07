@@ -1,41 +1,41 @@
 {
   "../../../../../@crx/manifest": {
-    "file": "assets/crx-manifest.js-ASUe5dyj.js",
+    "file": "assets/crx-manifest.js-UsPVlDvc.js",
     "name": "crx-manifest.js",
     "src": "../../../../../@crx/manifest",
     "isEntry": true
   },
-  "_content.js-loader-lX0mXYNC.js": {
-    "file": "assets/content.js-loader-lX0mXYNC.js",
-    "src": "_content.js-loader-lX0mXYNC.js"
+  "_content.js-loader-B3VzEdfq.js": {
+    "file": "assets/content.js-loader-B3VzEdfq.js",
+    "src": "_content.js-loader-B3VzEdfq.js"
   },
-  "_storage-CXpF4OEx.js": {
-    "file": "assets/storage-CXpF4OEx.js",
+  "_storage-D2uzPJPy.js": {
+    "file": "assets/storage-D2uzPJPy.js",
     "name": "storage",
     "css": [
-      "assets/storage-FapxwYOU.css"
+      "assets/storage-DenLb-rN.css"
     ]
   },
-  "_storage-FapxwYOU.css": {
-    "file": "assets/storage-FapxwYOU.css",
-    "src": "_storage-FapxwYOU.css"
+  "_storage-DenLb-rN.css": {
+    "file": "assets/storage-DenLb-rN.css",
+    "src": "_storage-DenLb-rN.css"
   },
   "src/content.js": {
-    "file": "assets/content.js-Cst0cmY3.js",
+    "file": "assets/content.js-DrwtEx_B.js",
     "name": "content.js",
     "src": "src/content.js",
     "isEntry": true,
     "imports": [
-      "_storage-CXpF4OEx.js"
+      "_storage-D2uzPJPy.js"
     ]
   },
   "src/popup.html": {
-    "file": "assets/popup-CnyKXbsT.js",
+    "file": "assets/popup-00UoG5PO.js",
     "name": "popup",
     "src": "src/popup.html",
     "isEntry": true,
     "imports": [
-      "_storage-CXpF4OEx.js"
+      "_storage-D2uzPJPy.js"
     ]
   }
 }
