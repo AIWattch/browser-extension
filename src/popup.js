@@ -15,7 +15,7 @@ function showUserStats() {
 const infoBtn = document.querySelector('#more-info')
 infoBtn.href = chrome.runtime.getURL('./src/how-does-it-work.html')
 
-const adminBtn = document.querySelector('#admin-page')
-adminBtn.href = chrome.runtime.getURL('./src/admin.html')
+//const adminBtn = document.querySelector('#admin-page')
+//adminBtn.href = chrome.runtime.getURL('./src/admin.html')
 
 showUserStats()

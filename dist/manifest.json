@@ -21,7 +21,7 @@
   "content_scripts": [
     {
       "js": [
-        "assets/content.js-loader-DKtVjQ6C.js"
+        "assets/content.js-loader-CoEp8BMG.js"
       ],
       "run_at": "document_idle",
       "matches": [
@@ -39,7 +39,9 @@
       ],
       "resources": [
         "assets/*",
-        "src/how-does-it-work.html"
+        "src/how-does-it-work.html",
+        "src/admin.html",
+        "src/admin.js"
       ],
       "use_dynamic_url": false
     },
@@ -49,7 +51,7 @@
       ],
       "resources": [
         "assets/storage-_1Ulq0WJ.js",
-        "assets/content.js-DjyZ30Yx.js"
+        "assets/content.js-K5vJvRkc.js"
       ],
       "use_dynamic_url": false
     }

@@ -27,7 +27,7 @@
   ],
   "web_accessible_resources": [{
     "matches": ["<all_urls>"],
-    "resources": ["assets/*", "src/how-does-it-work.html"]
+    "resources": ["assets/*", "src/how-does-it-work.html", "src/admin.html", "src/admin.js"]
   }],
   "permissions": [
     "storage"

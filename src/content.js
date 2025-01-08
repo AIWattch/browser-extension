@@ -201,8 +201,8 @@ const initConfig = function(value) {
           obj['config'] = {}
           obj['config']['charsPerToken'] = 4
           obj['config']['gridFactor'] = 383
-          obj['config']['inputFactor'] = 0.0000001
-          obj['config']['outputFactor'] = 0.0000002
+          obj['config']['inputFactor'] = 0.014
+          obj['config']['outputFactor'] = 0.07
           obj['config']['PUE'] = 1.125
         } else if (value === 'ui') {
           obj['ui'] = {}
