@@ -8,11 +8,14 @@ function showUserStats() {
     console.log(obj.inputTokens)
     userStats.textContent = `Input tokens: ${obj.inputTokens} \r\n`
     userStats.textContent += `Output tokens: ${obj.outputTokens} \r\n`
-    userStats.textContent += `Total emissions: ${obj.totalEmissions.toString().substring(0,6)}gCO2e/kWh \r\n`
+    userStats.textContent += `Total emissions: ${obj.totalEmissions.toString().substring(0,6)}gCO2e \r\n`
   })
 }
 
 const infoBtn = document.querySelector('#more-info')
 infoBtn.href = chrome.runtime.getURL('./src/how-does-it-work.html')
+
+const adminBtn = document.querySelector('#admin-page')
+adminBtn.href = chrome.runtime.getURL('./src/admin.html')
 
 showUserStats()

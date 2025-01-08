@@ -69,6 +69,12 @@ html.light {
 }
 
 /* admin page styles */
+.admin-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
 .main {
   display: flex;
   flex-direction: column;
@@ -90,5 +96,9 @@ html.light {
 }
 
 .config-value {
-  max-width: 25%;
+  max-width: 30%;
+}
+
+.config-btn {
+  width: 300px;
 }

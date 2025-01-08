@@ -1,6 +1,3 @@
-// TODO: prevent scientific notation for config items?
-// num.toLocaleString('fullwide', {useGrouping:false})
-
 import "./content.css"
 import {getStorage, saveToStorage} from "./storage"
 
@@ -119,6 +116,9 @@ const getUI = function() {
 
 function updateUI(obj) {
 
+  // Stops firing internally
+  if (window.location.href.startsWith("chrome-extension://")) return
+
   getUI().then((res) => {
     const parentDiv = res[0]
     const statsElem = res[1]
@@ -161,60 +161,70 @@ function updateUI(obj) {
   })
 }
 
-const initConfig = function() {
+export const doInitConfig = function() {
   return new Promise(function (resolve, reject) {
-    // *** test clear
-    //chrome.storage.local.remove('ui')
-    //chrome.storage.local.clear()
-
+    const allKeys = []
     const storageKeys = ['ui','config','user', 'system']
 
-    storageKeys.forEach((value) => {
-      getStorage(value).then((r) => {
-        console.log(`${value} values loaded OK`)
-        console.log(r)
+    storageKeys.forEach((key) => {
+      allKeys.push = initConfig(key)
+    })
 
-        if (value === 'user') {
-          updateUI(r)
-        }
-      }).catch((err) => {
-        if (err === "emptyKey") {
-          console.log(`No ${value} values found`)
-
-          const obj = {}
-          if (value === 'user') {
-            obj['user'] = {}
-            obj['user']['inputTokens'] = 0
-            obj['user']['outputTokens'] = 0
-            obj['user']['totalEmissions'] = 0
-          } else if (value === 'config') {
-            obj['config'] = {}
-            obj['config']['charsPerToken'] = 4
-            obj['config']['gridFactor'] = 383
-            obj['config']['inputFactor'] = 0.0000001
-            obj['config']['outputFactor'] = 0.0000002
-            obj['config']['PUE'] = 1.125
-          } else if (value === 'ui') {
-            obj['ui'] = {}
-            obj['ui']['xPos'] = "68%" 
-            obj['ui']['yPos'] = "70%"
-          } else if (value === 'system') {
-            obj['system'] = {}
-            obj['system']['chromeVersion'] = getChromeVersion()
-          }
-
-          saveToStorage(obj).then((s) => {
-            console.log(`${value} values saved OK`)
-          })
-        } else {
-          console.error(err)
-        }
-      })
+    Promise.all(allKeys).then((res) => {
+      resolve(res)
+    }).catch((err) => {
+      console.error(err)
     })
   })
 }
 
-initConfig()
+const initConfig = function(value) {
+  return new Promise(function (resolve, reject) {
+    getStorage(value).then((r) => {
+      console.log(`${value} values loaded OK`)
+      console.log(r)
+
+      if (value === 'user') {
+        updateUI(r)
+      }
+    }).catch((err) => {
+      if (err === "emptyKey") {
+        console.log(`No ${value} values found`)
+
+        const obj = {}
+        if (value === 'user') {
+          obj['user'] = {}
+          obj['user']['inputTokens'] = 0
+          obj['user']['outputTokens'] = 0
+          obj['user']['totalEmissions'] = 0
+        } else if (value === 'config') {
+          obj['config'] = {}
+          obj['config']['charsPerToken'] = 4
+          obj['config']['gridFactor'] = 383
+          obj['config']['inputFactor'] = 0.0000001
+          obj['config']['outputFactor'] = 0.0000002
+          obj['config']['PUE'] = 1.125
+        } else if (value === 'ui') {
+          obj['ui'] = {}
+          obj['ui']['xPos'] = "68%" 
+          obj['ui']['yPos'] = "70%"
+        } else if (value === 'system') {
+          obj['system'] = {}
+          obj['system']['chromeVersion'] = getChromeVersion()
+        }
+
+        saveToStorage(obj).then((s) => {
+          console.log(`${value} values saved OK`)
+          resolve(s)
+        })
+      } else {
+        console.error(err)
+      }
+    })
+  })
+}
+
+doInitConfig()
 
 function handleMouse(div) {
   let mousePosition
@@ -257,6 +267,6 @@ function handleMouse(div) {
 }
 
 function getChromeVersion () {     
-    var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
-    return raw ? parseInt(raw[2], 10) : false;
+  var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
+  return raw ? parseInt(raw[2], 10) : false;
 }
