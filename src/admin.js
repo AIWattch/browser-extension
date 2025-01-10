@@ -25,6 +25,10 @@ function displayConfig() {
       mainDiv.appendChild(container)
     }
   }).catch((err) => {
+    if (err === 'emptyKey') {
+      resetConfig()
+    }
+
     console.error(err)
   })
 }
@@ -49,7 +53,7 @@ function resetConfig() {
   doInitConfig().then((r) => {
     setTimeout(() => {
       displayConfig()
-    }, 100)
+    }, 50)
     console.log("config values reset to default")
   })
 }

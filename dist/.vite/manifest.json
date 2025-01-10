@@ -5,37 +5,53 @@
     "src": "../../../../../@crx/manifest",
     "isEntry": true
   },
-  "_content.js-loader-CoEp8BMG.js": {
-    "file": "assets/content.js-loader-CoEp8BMG.js",
-    "src": "_content.js-loader-CoEp8BMG.js"
+  "_content.js-loader-mOIJnVkt.js": {
+    "file": "assets/content.js-loader-mOIJnVkt.js",
+    "src": "_content.js-loader-mOIJnVkt.js"
   },
-  "_storage-_1Ulq0WJ.js": {
-    "file": "assets/storage-_1Ulq0WJ.js",
+  "_modulepreload-polyfill-B5Qt9EMX.js": {
+    "file": "assets/modulepreload-polyfill-B5Qt9EMX.js",
+    "name": "modulepreload-polyfill"
+  },
+  "_storage-2JPAyshp.css": {
+    "file": "assets/storage-2JPAyshp.css",
+    "src": "_storage-2JPAyshp.css"
+  },
+  "_storage-DDbOanX3.js": {
+    "file": "assets/storage-DDbOanX3.js",
     "name": "storage",
     "css": [
-      "assets/storage-cN8qdjYG.css"
+      "assets/storage-2JPAyshp.css"
     ]
   },
-  "_storage-cN8qdjYG.css": {
-    "file": "assets/storage-cN8qdjYG.css",
-    "src": "_storage-cN8qdjYG.css"
+  "src/admin.html": {
+    "file": "assets/admin-BBKCRqqp.js",
+    "name": "admin",
+    "src": "src/admin.html",
+    "isEntry": true,
+    "imports": [
+      "_modulepreload-polyfill-B5Qt9EMX.js",
+      "_storage-DDbOanX3.js",
+      "src/content.js"
+    ]
   },
   "src/content.js": {
-    "file": "assets/content.js-K5vJvRkc.js",
+    "file": "assets/content.js-wL9tBlZK.js",
     "name": "content.js",
     "src": "src/content.js",
     "isEntry": true,
     "imports": [
-      "_storage-_1Ulq0WJ.js"
+      "_storage-DDbOanX3.js"
     ]
   },
   "src/popup.html": {
-    "file": "assets/popup-NRY5E7th.js",
+    "file": "assets/popup-Dn3CZdw7.js",
     "name": "popup",
     "src": "src/popup.html",
     "isEntry": true,
     "imports": [
-      "_storage-_1Ulq0WJ.js"
+      "_modulepreload-polyfill-B5Qt9EMX.js",
+      "_storage-DDbOanX3.js"
     ]
   }
 }
