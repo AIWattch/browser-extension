@@ -21,14 +21,14 @@
   "content_scripts": [
     {
       "js": [
-        "assets/content.js-loader-mOIJnVkt.js"
+        "assets/content.js-loader-BrpzGPwT.js"
       ],
       "run_at": "document_idle",
       "matches": [
         "https://chatgpt.com/*"
       ],
       "css": [
-        "assets/storage-2JPAyshp.css"
+        "assets/content-2JPAyshp.css"
       ]
     }
   ],
@@ -50,8 +50,8 @@
         "https://chatgpt.com/*"
       ],
       "resources": [
-        "assets/storage-DDbOanX3.js",
-        "assets/content.js-wL9tBlZK.js"
+        "assets/content-DVbhRlzc.js",
+        "assets/content.js-CkTY_gaN.js"
       ],
       "use_dynamic_url": false
     }

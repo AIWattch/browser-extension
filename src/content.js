@@ -126,6 +126,12 @@ function updateUI(obj) {
     getStorage('ui').then((r) => {
       parentDiv.style.top = r.yPos
       parentDiv.style.left = r.xPos
+    }).catch((err) => {
+      if (err === 'emptyKey') {
+        initConfig('ui')
+      } else {
+        console.error(err)
+      }
     })
 
     handleMouse(parentDiv)

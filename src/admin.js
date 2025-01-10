@@ -27,9 +27,9 @@ function displayConfig() {
   }).catch((err) => {
     if (err === 'emptyKey') {
       resetConfig()
+    } else {
+      console.error(err)
     }
-
-    console.error(err)
   })
 }
 

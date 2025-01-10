@@ -9,7 +9,6 @@ export const getStorage = function(obj) {
         }
       })
     } catch (err) {
-      console.error(err)
       reject(err)
     }
   })
@@ -22,7 +21,6 @@ export const saveToStorage = function(obj) {
         resolve(result)
       })
     } catch (err) {
-      console.error(err)
       reject(err)
     }
   })

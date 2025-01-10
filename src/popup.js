@@ -1,5 +1,6 @@
 import "./content.css"
 import {getStorage, saveToStorage} from "./storage"
+import {doInitConfig} from "./content"
 
 function showUserStats() {
   getStorage('user').then((obj) => {
@@ -11,6 +12,14 @@ function showUserStats() {
     userStats.textContent += `Total emissions: ${obj.totalEmissions.toString().substring(0,6)} gCO2e\r\n\n`
     userStats.textContent += `🚗 Your AI drive: ${calcMiles} miles\r\n`
     
+  }).catch((err) => {
+    if (err === "emptyKey") {
+      doInitConfig().then((r) => {
+        showUserStats()
+      })
+    } else {
+      console.log(err)
+    }
   })
 }
 
