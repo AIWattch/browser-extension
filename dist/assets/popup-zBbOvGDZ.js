@@ -1,4 +1,4 @@
-import"./modulepreload-polyfill-B5Qt9EMX.js";import{g as s,d as r}from"./content-DVbhRlzc.js";function n(){s("user").then(t=>{const e=document.querySelector(".stats"),o=(t.totalEmissions/400).toString().substring(0,3);e.textContent=`Input tokens: ${t.inputTokens}\r
+import"./modulepreload-polyfill-B5Qt9EMX.js";import{g as s,d as r}from"./content-BbUgYAyj.js";function n(){s("user").then(t=>{const e=document.querySelector(".stats"),o=(t.totalEmissions/400).toString().substring(0,4);e.textContent=`Input tokens: ${t.inputTokens}\r
 `,e.textContent+=`Output tokens: ${t.outputTokens}\r
 `,e.textContent+=`Total emissions: ${t.totalEmissions.toString().substring(0,6)} gCO2e\r
 

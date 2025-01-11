@@ -1,4 +1,4 @@
-import "./content.css"
+import "./admin.css"
 import {getStorage, saveToStorage} from "./storage"
 import {doInitConfig} from "./content"
 
@@ -11,13 +11,15 @@ function displayConfig() {
       const container = document.createElement('div')
       container.className = 'config-container'
 
+      const itemValue = value.value
       const item = document.createElement('span')
       item.className = 'config-item'
-      item.innerText = key
+      item.innerText = value.label
+      item.innerText += value.unit ? ` (${value.unit})` : ''
       const configValue = document.createElement('input')
       configValue.type = 'number'
       configValue.className = 'config-value'
-      configValue.value = value.toLocaleString('en-US', { useGrouping: false, maximumFractionDigits: 20 })
+      configValue.value = itemValue.toLocaleString('en-US', { useGrouping: false, maximumFractionDigits: 20 })
 
       container.appendChild(item)
       container.appendChild(configValue)

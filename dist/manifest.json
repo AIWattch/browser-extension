@@ -1,6 +1,6 @@
 {
   "name": "AI Wattch",
-  "description": "",
+  "description": "AI Wattch is a Chrome extension that estimates and displays carbon emissions from your ChatGPT conversations.",
   "version": "0.0.1",
   "manifest_version": 3,
   "action": {
@@ -21,14 +21,14 @@
   "content_scripts": [
     {
       "js": [
-        "assets/content.js-loader-BrpzGPwT.js"
+        "assets/content.js-loader-DP_BMf7p.js"
       ],
       "run_at": "document_idle",
       "matches": [
         "https://chatgpt.com/*"
       ],
       "css": [
-        "assets/content-2JPAyshp.css"
+        "assets/content-CbiQ6Eg3.css"
       ]
     }
   ],
@@ -40,8 +40,7 @@
       "resources": [
         "assets/*",
         "src/how-does-it-work.html",
-        "src/admin.html",
-        "src/admin.js"
+        "src/admin.*"
       ],
       "use_dynamic_url": false
     },
@@ -50,8 +49,8 @@
         "https://chatgpt.com/*"
       ],
       "resources": [
-        "assets/content-DVbhRlzc.js",
-        "assets/content.js-CkTY_gaN.js"
+        "assets/content-BbUgYAyj.js",
+        "assets/content.js-pC9Wo0iR.js"
       ],
       "use_dynamic_url": false
     }

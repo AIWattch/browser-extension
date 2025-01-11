@@ -1,56 +1,62 @@
 {
   "../../../../../@crx/manifest": {
-    "file": "assets/crx-manifest.js-C49nVKPp.js",
+    "file": "assets/crx-manifest.js-B8Z18Pt7.js",
     "name": "crx-manifest.js",
     "src": "../../../../../@crx/manifest",
     "isEntry": true
   },
-  "_content-2JPAyshp.css": {
-    "file": "assets/content-2JPAyshp.css",
-    "src": "_content-2JPAyshp.css"
-  },
-  "_content-DVbhRlzc.js": {
-    "file": "assets/content-DVbhRlzc.js",
+  "_content-BbUgYAyj.js": {
+    "file": "assets/content-BbUgYAyj.js",
     "name": "content",
     "css": [
-      "assets/content-2JPAyshp.css"
+      "assets/content-CbiQ6Eg3.css"
     ]
   },
-  "_content.js-loader-BrpzGPwT.js": {
-    "file": "assets/content.js-loader-BrpzGPwT.js",
-    "src": "_content.js-loader-BrpzGPwT.js"
+  "_content-CbiQ6Eg3.css": {
+    "file": "assets/content-CbiQ6Eg3.css",
+    "src": "_content-CbiQ6Eg3.css"
+  },
+  "_content.js-loader-DP_BMf7p.js": {
+    "file": "assets/content.js-loader-DP_BMf7p.js",
+    "src": "_content.js-loader-DP_BMf7p.js"
   },
   "_modulepreload-polyfill-B5Qt9EMX.js": {
     "file": "assets/modulepreload-polyfill-B5Qt9EMX.js",
     "name": "modulepreload-polyfill"
   },
   "src/admin.html": {
-    "file": "assets/admin-BuwKT0w7.js",
+    "file": "assets/admin-CnPNcITE.js",
     "name": "admin",
     "src": "src/admin.html",
     "isEntry": true,
     "imports": [
       "_modulepreload-polyfill-B5Qt9EMX.js",
-      "_content-DVbhRlzc.js"
+      "_content-BbUgYAyj.js"
+    ],
+    "css": [
+      "assets/admin-CP7cQBAW.css"
     ]
   },
   "src/content.js": {
-    "file": "assets/content.js-CkTY_gaN.js",
+    "file": "assets/content.js-pC9Wo0iR.js",
     "name": "content.js",
     "src": "src/content.js",
     "isEntry": true,
     "imports": [
-      "_content-DVbhRlzc.js"
+      "_content-BbUgYAyj.js"
     ]
   },
   "src/popup.html": {
-    "file": "assets/popup-C_qkM7hD.js",
+    "file": "assets/popup-zBbOvGDZ.js",
     "name": "popup",
     "src": "src/popup.html",
     "isEntry": true,
     "imports": [
       "_modulepreload-polyfill-B5Qt9EMX.js",
-      "_content-DVbhRlzc.js"
+      "_content-BbUgYAyj.js"
+    ],
+    "css": [
+      "assets/popup-DAnfx-A_.css"
     ]
   }
 }

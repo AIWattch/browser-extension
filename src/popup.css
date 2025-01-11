@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-width: 250px;
+  gap: 1em;
+  font-size: 1.25em;
+
+  .stats {
+    width: fit-content;
+    white-space: pre-line;
+  }
+
+  a {
+    color: blue;
+    text-decoration: none;
+  }
+}

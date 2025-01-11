@@ -1,0 +1,1 @@
+.admin-container{display:flex;flex-direction:column;gap:1em;max-width:fit-content}.title{font-size:2em}.main{display:flex;flex-direction:column;gap:1em;border:1px solid;padding:1em;border-radius:6px;width:fit-content}.config-container{display:flex;flex-direction:row;gap:1em}.config-item{flex-grow:1}.config-value{max-width:30%}.config-btn{width:100%}

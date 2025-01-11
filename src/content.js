@@ -64,7 +64,7 @@ const calcTokens = function(textNode) {
     let prevTokens = 0
 
     getStorage('config').then((r) => {
-      const newTokens = msgLength / r.charsPerToken
+      const newTokens = msgLength / r.charsPerToken.value
 
       getStorage('user').then((userObj) => {
         const prevTokens = userObj[msgType]
@@ -82,8 +82,8 @@ const calcEmissions = function(obj) {
     const outputTokens = obj["outputTokens"]
 
     getStorage('config').then((r) => {
-      const totalEnergy = (inputTokens * r.inputFactor + outputTokens * r.outputFactor) * r.PUE
-      const totalEmissions = totalEnergy * r.gridFactor
+      const totalEnergy = (inputTokens * r.inputFactor.value + outputTokens * r.outputFactor.value) * r.PUE.value
+      const totalEmissions = totalEnergy * r.gridFactor.value
       return totalEmissions
     }).then((r) => {
       obj["totalEmissions"] = r 
@@ -136,9 +136,12 @@ function updateUI(obj) {
 
     handleMouse(parentDiv)
 
+    const calcMiles = (obj.totalEmissions / 400).toString().substring(0,4)
+
     statsElem.textContent = `Input tokens: ${obj.inputTokens} \r\n`
     statsElem.textContent += `Output tokens: ${obj.outputTokens} \r\n`
-    statsElem.textContent += `Total emissions: ${obj.totalEmissions.toString().substring(0,6)}gCO2e \r\n`
+    statsElem.textContent += `Total emissions: ${obj.totalEmissions.toString().substring(0,6)} gCO2e \r\n`
+    statsElem.textContent += `🚗 Your AI drive: ${calcMiles} miles\r\n`
 
     const checkResetBtn = document.querySelector('.reset-btn')
 
@@ -188,7 +191,6 @@ const initConfig = function(value) {
   return new Promise(function (resolve, reject) {
     getStorage(value).then((r) => {
       console.log(`${value} values loaded OK`)
-      console.log(r)
 
       if (value === 'user') {
         updateUI(r)
@@ -205,11 +207,31 @@ const initConfig = function(value) {
           obj['user']['totalEmissions'] = 0
         } else if (value === 'config') {
           obj['config'] = {}
-          obj['config']['charsPerToken'] = 4
-          obj['config']['gridFactor'] = 383
-          obj['config']['inputFactor'] = 0.014
-          obj['config']['outputFactor'] = 0.07
-          obj['config']['PUE'] = 1.125
+          obj['config']['charsPerToken'] = {
+            value: 4,
+            unit: '',
+            label: 'Characters Per Token'
+          }
+          obj['config']['gridFactor'] = {
+            value: 383,
+            unit: 'gCO2e/kWh',
+            label: 'Grid Factor' 
+          }
+          obj['config']['inputFactor'] = {
+            value: 0.000002,
+            unit: 'kWh/token',
+            label: 'Input Token Factor'
+          }
+          obj['config']['outputFactor'] = {
+            value: 0.000001,
+            unit: 'kWh/token',
+            label: 'Output Token Factor'
+          }
+          obj['config']['PUE'] = {
+            value: 1.2,
+            unit: '',
+            label: 'Power Usage Efficiency'
+          }
         } else if (value === 'ui') {
           obj['ui'] = {}
           obj['ui']['xPos'] = "68%" 

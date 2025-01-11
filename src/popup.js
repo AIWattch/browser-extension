@@ -1,11 +1,11 @@
-import "./content.css"
+import "./popup.css"
 import {getStorage, saveToStorage} from "./storage"
 import {doInitConfig} from "./content"
 
 function showUserStats() {
   getStorage('user').then((obj) => {
     const userStats = document.querySelector('.stats')
-    const calcMiles = (obj.totalEmissions / 400).toString().substring(0,3)
+    const calcMiles = (obj.totalEmissions / 400).toString().substring(0,4)
 
     userStats.textContent = `Input tokens: ${obj.inputTokens}\r\n`
     userStats.textContent += `Output tokens: ${obj.outputTokens}\r\n`
