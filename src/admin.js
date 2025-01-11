@@ -17,6 +17,7 @@ function displayConfig() {
       item.innerText = value.label
       item.innerText += value.unit ? ` (${value.unit})` : ''
       const configValue = document.createElement('input')
+      configValue.id = key
       configValue.type = 'number'
       configValue.className = 'config-value'
       configValue.value = itemValue.toLocaleString('en-US', { useGrouping: false, maximumFractionDigits: 20 })
@@ -41,12 +42,15 @@ function updateConfig() {
   const obj = {}
   obj['config'] = {}
 
-  for (let i=0; i < allItems.length; i++) {
-    obj['config'][allItems[i].innerText] = allValues[i].value
-  }
+  getStorage('config').then((obj) => {
+    for (let [key, value] of Object.entries(obj)) {
+      const keyValue = document.querySelector(`#${key}`).value
+      obj[key].value = keyValue
+    }
 
-  saveToStorage({'config' : obj.config}).then((r) => {
-    console.log('config values updated OK')
+    saveToStorage({'config' : obj}).then((r) => {
+      console.log('config values updated OK')
+    })
   })
 }
 

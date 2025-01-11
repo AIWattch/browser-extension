@@ -64,6 +64,7 @@ const calcTokens = function(textNode) {
     let prevTokens = 0
 
     getStorage('config').then((r) => {
+      console.log(r)
       const newTokens = msgLength / r.charsPerToken.value
 
       getStorage('user').then((userObj) => {
@@ -218,12 +219,12 @@ const initConfig = function(value) {
             label: 'Grid Factor' 
           }
           obj['config']['inputFactor'] = {
-            value: 0.000002,
+            value: 0.002,
             unit: 'kWh/token',
             label: 'Input Token Factor'
           }
           obj['config']['outputFactor'] = {
-            value: 0.000001,
+            value: 0.01,
             unit: 'kWh/token',
             label: 'Output Token Factor'
           }

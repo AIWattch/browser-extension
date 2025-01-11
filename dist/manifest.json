@@ -21,7 +21,7 @@
   "content_scripts": [
     {
       "js": [
-        "assets/content.js-loader-DP_BMf7p.js"
+        "assets/content.js-loader-DIPcDQUB.js"
       ],
       "run_at": "document_idle",
       "matches": [
@@ -49,8 +49,8 @@
         "https://chatgpt.com/*"
       ],
       "resources": [
-        "assets/content-BbUgYAyj.js",
-        "assets/content.js-pC9Wo0iR.js"
+        "assets/content-EQ_ClptF.js",
+        "assets/content.js-98lBIlmi.js"
       ],
       "use_dynamic_url": false
     }
