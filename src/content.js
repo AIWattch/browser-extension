@@ -219,12 +219,12 @@ const initConfig = function(value) {
             label: 'Grid Factor' 
           }
           obj['config']['inputFactor'] = {
-            value: 0.002,
+            value: 0.000002,
             unit: 'kWh/token',
             label: 'Input Token Factor'
           }
           obj['config']['outputFactor'] = {
-            value: 0.01,
+            value: 0.00001,
             unit: 'kWh/token',
             label: 'Output Token Factor'
           }
