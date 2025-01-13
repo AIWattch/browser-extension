@@ -1,4 +1,4 @@
-# AI Watch
+# AI Wattch
 A Chrome extension that tracks your emissions while using ChatGPT.
 
 ## Installation
