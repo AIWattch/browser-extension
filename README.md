@@ -27,4 +27,5 @@ Alternatively, you can use the latest pre-built version of the extension by down
 ## Installation
 
 ### Load the extension in Chrome
+
 - Click the **Load unpacked** button, find the `chatgpt-emissions-tracker/dist` folder and click Open.
