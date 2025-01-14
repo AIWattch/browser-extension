@@ -1,10 +1,12 @@
 import "./content.css"
 import {getStorage, saveToStorage} from "./storage"
 
+// Wait for any DOM element to be changed
 const observer = new MutationObserver((mutationsList, observer) => {
   for (const mutation of mutationsList) {
     if (mutation.type === 'childList') {
       mutation.addedNodes.forEach((e) => {
+        // Matching the response element from ChatGPT
         if (typeof e.className === "string" && e.className === "fixed right-4 top-8 my-2 flex max-h-[90vh] flex-col-reverse space-y-2 space-y-reverse overflow-y-auto px-2 py-4")  {
           const outputText = e.innerText.replace("ChatGPT","")
           const allNodes = document.querySelectorAll('article')
@@ -26,12 +28,14 @@ observer.observe(document.body, { childList: true, subtree: true })
 function outputFinished(textNodes) {
   console.log('ChatGPT output finished')
 
+  // Calculate both input/output token count
   const allTokens = []
   textNodes.forEach((node) => {
     const token = calcTokens(node)
     allTokens.push(token)
   })
 
+  // Combine both token ammounts in to one object
   Promise.all(allTokens).then((res) => {
     let obj = {}
     res.forEach((r) => {
@@ -40,6 +44,7 @@ function outputFinished(textNodes) {
       obj[objName] = objValue
     })
 
+    // Make all emission based calculations
     calcEmissions(obj).then((res) => {
       return res
     }).then((r) => {
@@ -63,8 +68,8 @@ const calcTokens = function(textNode) {
 
     let prevTokens = 0
 
+    // Get previous stored user data for calculations
     getStorage('config').then((r) => {
-      console.log(r)
       const newTokens = msgLength / r.charsPerToken.value
 
       getStorage('user').then((userObj) => {
@@ -82,6 +87,7 @@ const calcEmissions = function(obj) {
     const inputTokens = obj["inputTokens"]
     const outputTokens = obj["outputTokens"]
 
+    // Equations for emission calculations
     getStorage('config').then((r) => {
       const totalEnergy = (inputTokens * r.inputFactor.value + outputTokens * r.outputFactor.value) * r.PUE.value
       const totalEmissions = totalEnergy * r.gridFactor.value
@@ -93,6 +99,7 @@ const calcEmissions = function(obj) {
   })
 }
 
+// Check if UI already exists or not
 const getUI = function() {
   return new Promise(function (resolve, reject) {
 
@@ -146,6 +153,7 @@ function updateUI(obj) {
 
     const checkResetBtn = document.querySelector('.reset-btn')
 
+    // Reset user data to zero with 'Reset button'
     if (!checkResetBtn) {
       const resetBtn = document.createElement('img')
       resetBtn.className = 'reset-btn'
@@ -176,10 +184,12 @@ export const doInitConfig = function() {
     const allKeys = []
     const storageKeys = ['ui','config','user', 'system']
 
+    // Get all storage data for each key
     storageKeys.forEach((key) => {
       allKeys.push = initConfig(key)
     })
 
+    // Process each key of data
     Promise.all(allKeys).then((res) => {
       resolve(res)
     }).catch((err) => {
@@ -192,6 +202,7 @@ const initConfig = function(value) {
   return new Promise(function (resolve, reject) {
     getStorage(value).then((r) => {
       console.log(`${value} values loaded OK`)
+      console.log(r)
 
       if (value === 'user') {
         updateUI(r)
@@ -200,6 +211,7 @@ const initConfig = function(value) {
       if (err === "emptyKey") {
         console.log(`No ${value} values found`)
 
+        // Default values for all config data
         const obj = {}
         if (value === 'user') {
           obj['user'] = {}
@@ -255,6 +267,7 @@ const initConfig = function(value) {
 
 doInitConfig()
 
+// Handle drag/drop logic
 function handleMouse(div) {
   let mousePosition
   let offset = [0,0]
@@ -270,6 +283,7 @@ function handleMouse(div) {
 
   document.addEventListener('mouseup', function() {
     isDown = false
+
     const obj = {}
     obj['ui'] = {}
     obj['ui']['xPos'] = div.style.left

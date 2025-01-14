@@ -7,6 +7,7 @@ function showUserStats() {
     const userStats = document.querySelector('.stats')
     const calcMiles = (obj.totalEmissions / 400).toString().substring(0,4)
 
+    // Display all token/emissions data
     userStats.textContent = `Input tokens: ${obj.inputTokens}\r\n`
     userStats.textContent += `Output tokens: ${obj.outputTokens}\r\n`
     userStats.textContent += `Total emissions: ${obj.totalEmissions.toString().substring(0,6)} gCO2e\r\n\n`

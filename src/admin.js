@@ -7,6 +7,7 @@ function displayConfig() {
     const mainDiv = document.querySelector('.main')
     mainDiv.replaceChildren()
 
+    // Populate the admin panel with retrieved data
     for (let [key, value] of Object.entries(obj)) {
       const container = document.createElement('div')
       container.className = 'config-container'
@@ -42,6 +43,7 @@ function updateConfig() {
   const obj = {}
   obj['config'] = {}
 
+  // Get object keys from displayed data
   getStorage('config').then((obj) => {
     for (let [key, value] of Object.entries(obj)) {
       const keyValue = document.querySelector(`#${key}`).value
