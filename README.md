@@ -29,3 +29,25 @@ Alternatively, you can use the latest pre-built version of the extension by down
 ### Load the extension in Chrome
 
 - Click the **Load unpacked** button, find the `chatgpt-emissions-tracker/dist` folder and click Open
+
+## Contributing
+
+We welcome contributions! Here's how you can help:
+
+1. Fork the repo
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+Before submitting:
+- Test your changes
+- Update documentation if needed
+- Follow our coding standards (TypeScript)
+- One feature per PR
+
+For major changes:
+- Open an issue first to discuss what you'd like to change
+- Mention any dependencies or breaking changes
+
+Need help? Check [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines or open an issue.
