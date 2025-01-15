@@ -26,7 +26,7 @@ We may update this privacy policy from time to time. We will notify users of any
 ## Contact
 If you have questions about this privacy policy, please:
 - Open an issue in our GitHub repository
-- Contact us at [your contact info]
+- Contact us at pascal@itclimateed.com
 
 ## Open Source
-This extension is open source. You can review our code at [repository URL].
+This extension is open source. You can review our code at https://github.com/AIWattch/browser-extension.
