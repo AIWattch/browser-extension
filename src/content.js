@@ -1,29 +1,36 @@
 import "./content.css"
 import {getStorage, saveToStorage} from "./storage"
 
-// Wait for any DOM element to be changed
-const observer = new MutationObserver((mutationsList, observer) => {
+let seenMessages = new Set();
+
+const observer = new MutationObserver((mutationsList) => {
   for (const mutation of mutationsList) {
     if (mutation.type === 'childList') {
-      mutation.addedNodes.forEach((e) => {
-        // Matching the response element from ChatGPT
-        if (typeof e.className === "string" && e.className === "fixed right-4 top-8 my-2 flex max-h-[90vh] flex-col-reverse space-y-2 space-y-reverse overflow-y-auto px-2 py-4")  {
-          const outputText = e.innerText.replace("ChatGPT","")
-          const allNodes = document.querySelectorAll('article')
-          const inputText = allNodes[allNodes.length - 2]
+      mutation.addedNodes.forEach((node) => {
+        if (node.nodeType === 1 && node.tagName === 'ARTICLE' && !seenMessages.has(node)) {
+          seenMessages.add(node);
 
-          const textNodes = []
-          textNodes.push({'type': 'inputTokens', 'content': inputText.innerText})
-          textNodes.push({'type': 'outputTokens', 'content': outputText})
+          const content = node.innerText.replace("ChatGPT", "").trim();
+          if (!content) return;
 
-          outputFinished(textNodes)
+          const isOutput = node.querySelector('div.markdown') !== null;
+
+          outputFinished([
+            {
+              type: isOutput ? 'outputTokens' : 'inputTokens',
+              content: content
+            }
+          ]);
         }
-      })
-    } 
+      });
+    }
   }
-})
+});
 
-observer.observe(document.body, { childList: true, subtree: true })
+const mainArea = document.querySelector("main");
+if (mainArea) {
+  observer.observe(mainArea, { childList: true, subtree: true });
+}
 
 function outputFinished(textNodes) {
   console.log('ChatGPT output finished')
