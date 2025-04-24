@@ -22,16 +22,19 @@
     {
       "run_at" : "document_idle",
       "js": ["src/content.js"],
-      "matches": ["https://chatgpt.com/*"]
+      "css": ["src/content.css"],
+      "matches": ["https://chatgpt.com/*"],
+      "type": "module"
     }
   ],
-  "privacy_policy": "https://github.com/AIWattch/browser-extension/blob/master/PRIVACY.md",
+  
   "web_accessible_resources": [{
     "matches": ["<all_urls>"],
-    "resources": ["assets/*", "src/how-does-it-work.html", "src/admin.*"]
+    "resources": ["assets/*", "src/how-does-it-work.html", "src/admin.*","src/popup.css", "src/content.css", "src/storage.js"]
   }],
   "permissions": [
-    "storage"
+    "storage",
+    "activeTab"
   ],
   "host_permissions": [
     "https://chatgpt.com/*"
