@@ -15,7 +15,7 @@ Here's a short [demo video](https://www.youtube.com/watch?v=594hVECkKlc)
 Ensure you have Node.js and npm installed, [click here for instructions to download](https://nodejs.org/en/download)
 
 ```
-git clone git@github.com:ozrendev/chatgpt-emissions-tracker.git 
+git clone https://github.com/AIWattch/browser-extension.git 
 cd chatgpt-emissions-tracker/
 npm i
 npm run build
