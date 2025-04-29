@@ -124,9 +124,13 @@ const getUI = function() {
     } else {
       const parentDiv = document.createElement('div')
       const statsElem = document.createElement('span')
-      parentDiv.id = parentId 
+      parentDiv.id = parentId
       parentDiv.insertAdjacentElement('afterbegin', statsElem)
-      document.body.insertAdjacentElement('afterbegin', parentDiv)
+
+      // Unsolved UI bug needs a short timeout here
+      setTimeout(() => {
+        document.body.insertAdjacentElement('afterbegin', parentDiv)
+      }, 100);
 
       resolve([parentDiv, statsElem])
     }
@@ -258,7 +262,7 @@ const initConfig = function(value) {
             }
           } else if (value === 'ui') {
             obj['ui'] = {}
-            obj['ui']['xPos'] = "68%" 
+            obj['ui']['xPos'] = "68%"
             obj['ui']['yPos'] = "70%"
           } else if (value === 'system') {
             obj['system'] = {}
@@ -320,7 +324,7 @@ function handleMouse(div) {
   }, true)
 }
 
-function getChromeVersion () {     
+function getChromeVersion () {
   var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
   return raw ? parseInt(raw[2], 10) : false;
 }
