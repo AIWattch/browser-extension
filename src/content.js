@@ -1,22 +1,33 @@
-import "./content.css"
-import {getStorage, saveToStorage} from "./storage"
+import "./content.css";
+import {getStorage, saveToStorage} from "./storage";
 
 // Wait for any DOM element to be changed
 const observer = new MutationObserver((mutationsList, observer) => {
   for (const mutation of mutationsList) {
     if (mutation.type === 'childList') {
       mutation.addedNodes.forEach((e) => {
-        // Matching the response element from ChatGPT
-        if (typeof e.className === "string" && e.className === "fixed right-4 top-8 my-2 flex max-h-[90vh] flex-col-reverse space-y-2 space-y-reverse overflow-y-auto px-2 py-4")  {
-          const outputText = e.innerText.replace("ChatGPT","")
-          const allNodes = document.querySelectorAll('article')
-          const inputText = allNodes[allNodes.length - 2]
 
-          const textNodes = []
-          textNodes.push({'type': 'inputTokens', 'content': inputText.innerText})
-          textNodes.push({'type': 'outputTokens', 'content': outputText})
+        // if (e.nodeType === 3 && e.nodeValue === "ChatGPT is generating a response...") {
+        //   console.log("RESPONSE START");
+        // }
 
-          outputFinished(textNodes)
+        // Wait until the "Submit" button is available again
+        if (typeof e.className === "string" && e.hasAttributes() && e.getAttribute("data-testid") === "composer-speech-button-container") {
+          if (e.innerText === "Voice") {
+            const allNodes = document.querySelectorAll('article')
+
+            if (allNodes.length !== 0) {
+              const outputNode = allNodes[allNodes.length - 1];
+
+              const outputText = outputNode.innerText.replace("ChatGPT said:","");
+              const inputText = allNodes[allNodes.length - 2];
+              const textNodes = [];
+              textNodes.push({'type': 'inputTokens', 'content': inputText.innerText});
+              textNodes.push({'type': 'outputTokens', 'content': outputText});
+
+              outputFinished(textNodes)
+            }
+          }
         }
       })
     } 
@@ -48,15 +59,15 @@ function outputFinished(textNodes) {
     calcEmissions(obj).then((res) => {
       return res
     }).then((r) => {
-      saveToStorage({'user' : r})
-      return r
-    }).then((r) => {
-      updateUI(r)
-    })
+        saveToStorage({'user' : r})
+        return r
+      }).then((r) => {
+        updateUI(r)
+      })
 
   }).catch((err) => {
-    console.error(err)
-  })
+      console.error(err)
+    })
 }
 
 const calcTokens = function(textNode) {
@@ -93,9 +104,9 @@ const calcEmissions = function(obj) {
       const totalEmissions = totalEnergy * r.gridFactor.value
       return totalEmissions
     }).then((r) => {
-      obj["totalEmissions"] = r 
-      resolve(obj)
-    })
+        obj["totalEmissions"] = r 
+        resolve(obj)
+      })
   })
 }
 
@@ -135,12 +146,12 @@ function updateUI(obj) {
       parentDiv.style.top = r.yPos
       parentDiv.style.left = r.xPos
     }).catch((err) => {
-      if (err === 'emptyKey') {
-        initConfig('ui')
-      } else {
-        console.error(err)
-      }
-    })
+        if (err === 'emptyKey') {
+          initConfig('ui')
+        } else {
+          console.error(err)
+        }
+      })
 
     handleMouse(parentDiv)
 
@@ -170,8 +181,8 @@ function updateUI(obj) {
           console.log('cleared storage OK')
           updateUI(obj.user)
         }).catch((err) => {
-          console.log(err)
-        })
+            console.log(err)
+          })
       }, true)
 
       parentDiv.appendChild(resetBtn)
@@ -193,8 +204,8 @@ export const doInitConfig = function() {
     Promise.all(allKeys).then((res) => {
       resolve(res)
     }).catch((err) => {
-      console.error(err)
-    })
+        console.error(err)
+      })
   })
 }
 
@@ -208,60 +219,60 @@ const initConfig = function(value) {
         updateUI(r)
       }
     }).catch((err) => {
-      if (err === "emptyKey") {
-        console.log(`No ${value} values found`)
+        if (err === "emptyKey") {
+          console.log(`No ${value} values found`)
 
-        // Default values for all config data
-        const obj = {}
-        if (value === 'user') {
-          obj['user'] = {}
-          obj['user']['inputTokens'] = 0
-          obj['user']['outputTokens'] = 0
-          obj['user']['totalEmissions'] = 0
-        } else if (value === 'config') {
-          obj['config'] = {}
-          obj['config']['charsPerToken'] = {
-            value: 4,
-            unit: '',
-            label: 'Characters Per Token'
+          // Default values for all config data
+          const obj = {}
+          if (value === 'user') {
+            obj['user'] = {}
+            obj['user']['inputTokens'] = 0
+            obj['user']['outputTokens'] = 0
+            obj['user']['totalEmissions'] = 0
+          } else if (value === 'config') {
+            obj['config'] = {}
+            obj['config']['charsPerToken'] = {
+              value: 4,
+              unit: '',
+              label: 'Characters Per Token'
+            }
+            obj['config']['gridFactor'] = {
+              value: 383,
+              unit: 'gCO2e/kWh',
+              label: 'Grid Factor' 
+            }
+            obj['config']['inputFactor'] = {
+              value: 0.000002,
+              unit: 'kWh/token',
+              label: 'Input Token Factor'
+            }
+            obj['config']['outputFactor'] = {
+              value: 0.00001,
+              unit: 'kWh/token',
+              label: 'Output Token Factor'
+            }
+            obj['config']['PUE'] = {
+              value: 1.2,
+              unit: '',
+              label: 'Power Usage Efficiency'
+            }
+          } else if (value === 'ui') {
+            obj['ui'] = {}
+            obj['ui']['xPos'] = "68%" 
+            obj['ui']['yPos'] = "70%"
+          } else if (value === 'system') {
+            obj['system'] = {}
+            obj['system']['chromeVersion'] = getChromeVersion()
           }
-          obj['config']['gridFactor'] = {
-            value: 383,
-            unit: 'gCO2e/kWh',
-            label: 'Grid Factor' 
-          }
-          obj['config']['inputFactor'] = {
-            value: 0.000002,
-            unit: 'kWh/token',
-            label: 'Input Token Factor'
-          }
-          obj['config']['outputFactor'] = {
-            value: 0.00001,
-            unit: 'kWh/token',
-            label: 'Output Token Factor'
-          }
-          obj['config']['PUE'] = {
-            value: 1.2,
-            unit: '',
-            label: 'Power Usage Efficiency'
-          }
-        } else if (value === 'ui') {
-          obj['ui'] = {}
-          obj['ui']['xPos'] = "68%" 
-          obj['ui']['yPos'] = "70%"
-        } else if (value === 'system') {
-          obj['system'] = {}
-          obj['system']['chromeVersion'] = getChromeVersion()
+
+          saveToStorage(obj).then((s) => {
+            console.log(`${value} values saved OK`)
+            resolve(s)
+          })
+        } else {
+          console.error(err)
         }
-
-        saveToStorage(obj).then((s) => {
-          console.log(`${value} values saved OK`)
-          resolve(s)
-        })
-      } else {
-        console.error(err)
-      }
-    })
+      })
   })
 }
 
