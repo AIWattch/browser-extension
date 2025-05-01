@@ -25,7 +25,6 @@
       "matches": ["https://chatgpt.com/*"]
     }
   ],
-  "privacy_policy": "https://github.com/AIWattch/browser-extension/blob/master/PRIVACY.md",
   "web_accessible_resources": [{
     "matches": ["<all_urls>"],
     "resources": ["assets/*", "src/how-does-it-work.html", "src/admin.*"]
