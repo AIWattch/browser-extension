@@ -13,8 +13,10 @@ const observer = new MutationObserver((mutationsList, observer) => {
 
         // Wait until the "Submit" button is available again
         if (typeof e.className === "string" && e.hasAttributes() && e.getAttribute("data-testid") === "composer-speech-button-container") {
-          if (e.innerText === "Voice") {
-            const allNodes = document.querySelectorAll('article')
+
+          if (e.children[0] && e.children[0].getAttribute("data-state") === "closed") {
+
+            const allNodes = document.querySelectorAll('article');
 
             if (allNodes.length !== 0) {
               const outputNode = allNodes[allNodes.length - 1];
