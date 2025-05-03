@@ -11,9 +11,10 @@ const observer = new MutationObserver((mutationsList, observer) => {
         //   console.log("RESPONSE START");
         // }
 
-        // Wait until the "Submit" button is available again
+        // Wait until the "submit" button is available again
         if (typeof e.className === "string" && e.hasAttributes() && e.getAttribute("data-testid") === "composer-speech-button-container") {
 
+          // Check if "submit" button internal state has changed - this tells us the response has finished
           if (e.children[0] && e.children[0].getAttribute("data-state") === "closed") {
 
             const allNodes = document.querySelectorAll('article');
