@@ -52,3 +52,13 @@ For major changes:
 - Mention any dependencies or breaking changes
 
 Need help? Check [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines or open an issue.
+
+## Running Tests
+
+Unit tests are set up using [Vitest](https://vitest.dev/). To run the tests, use the following command in your terminal:
+
+```bash
+npm test
+```
+
+This will execute all test files in the `src` directory that match the `*.test.js` pattern.
