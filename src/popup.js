@@ -35,4 +35,7 @@ infoBtn.href = chrome.runtime.getURL('./src/how-does-it-work.html')
 const adminBtn = document.querySelector('#admin-page')
 adminBtn.href = chrome.runtime.getURL('./src/admin.html')
 
+const reviewBtn = document.querySelector("#leave-a-review")
+reviewBtn.href = "https://chromewebstore.google.com/detail/ai-wattch/meacendfnhnjbkmfbfogbmekkhnamffn/reviews"
+
 showUserStats()
