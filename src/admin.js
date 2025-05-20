@@ -29,12 +29,24 @@ function displayConfig() {
       mainDiv.appendChild(container)
     }
   }).catch((err) => {
-    if (err === 'emptyKey') {
-      resetConfig()
+      if (err === 'emptyKey') {
+        resetConfig()
+      } else {
+        console.error(err)
+      }
+    })
+
+  getStorage('system').then((obj) => {
+    console.log(obj.calcMethod)
+    if (obj.calcMethod === "timeBased") {
+      toggleCalcMethodBtn.checked = true
+      console.log('enabledlled')
     } else {
-      console.error(err)
+      toggleCalcMethodBtn.checked = false
     }
-  })
+  }).catch((err) => {
+      console.error(err)
+    })
 }
 
 function updateConfig() {
@@ -66,10 +78,29 @@ function resetConfig() {
   })
 }
 
+function toggleCalcMethod() {
+  const obj = {}
+  obj['system'] = {}
+
+  if (toggleCalcMethodBtn.checked === true) {
+    obj['system']['calcMethod'] = 'timeBased'
+  } else {
+    obj['system']['calcMethod'] = 'tokenBased'
+  }
+
+  saveToStorage(obj).then((r) => {
+    console.log('config values updated OK')
+    chrome.runtime.sendMessage({ type: 'updateConfig', config: obj })
+  })
+}
+
 const updateConfigBtn = document.querySelector('#update-config-btn')
 updateConfigBtn.addEventListener('mouseup', updateConfig)
 
 const resetConfigBtn = document.querySelector('#reset-config-btn')
 resetConfigBtn.addEventListener('mouseup', resetConfig)
+
+const toggleCalcMethodBtn = document.querySelector('#enable-time-based-calc')
+toggleCalcMethodBtn.addEventListener('click', toggleCalcMethod)
 
 displayConfig()

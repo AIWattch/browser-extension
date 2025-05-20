@@ -3,24 +3,29 @@ import {getStorage, saveToStorage} from "./storage"
 import {doInitConfig} from "./content"
 
 function showUserStats() {
-  getStorage('user').then((obj) => {
-    const userStats = document.querySelector('.stats')
-    const calcMiles = (obj.totalEmissions / 400).toString().substring(0,4)
+  const statsElem = document.querySelector('.stats')
 
-    // Display all token/emissions data
-    userStats.textContent = `Input tokens: ${obj.inputTokens}\r\n`
-    userStats.textContent += `Output tokens: ${obj.outputTokens}\r\n`
-    userStats.textContent += `Total emissions: ${obj.totalEmissions.toString().substring(0,6)} gCO2e\r\n\n`
-    userStats.textContent += `🚗 Your AI drive: ${calcMiles} miles\r\n`
-    
-  }).catch((err) => {
-    if (err === "emptyKey") {
-      doInitConfig().then((r) => {
-        showUserStats()
+  getStorage('system').then((r) => {
+    getStorage('user').then((obj) => {
+      if (r.calcMethod === "timeBased") {
+        statsElem.textContent = `Computation time: ${obj.compTime} \r\n`
+        statsElem.textContent += `Total emissions: ${obj.timeEmissions.toString().substring(0,6)} kgCO2e\r\n`
+      } else {
+        const calcMiles = (obj.totalEmissions / 400).toString().substring(0,4)
+        statsElem.textContent = `Input tokens: ${obj.inputTokens} \r\n`
+        statsElem.textContent += `Output tokens: ${obj.outputTokens} \r\n`
+        statsElem.textContent += `Total emissions: ${obj.totalEmissions.toString().substring(0,6)} gCO2e \r\n`
+        statsElem.textContent += `🚗 Your AI drive: ${calcMiles} miles\r\n`
+      }
+    }).catch((err) => {
+        if (err === "emptyKey") {
+          doInitConfig().then((r) => {
+            showUserStats()
+          })
+        } else {
+          console.log(err)
+        }
       })
-    } else {
-      console.log(err)
-    }
   })
 }
 
