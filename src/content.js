@@ -390,7 +390,7 @@ const initConfig = function(value) {
             obj['config']['utilizationFactor'] = {
               value: 10,
               unit: '%',
-              label: 'Utilization Factor'
+              label: 'GPU Utilization'
             }
             obj['config']['networkLatency'] = {
               value: .1,

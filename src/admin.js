@@ -79,13 +79,16 @@ function resetConfig() {
 }
 
 function toggleCalcMethod() {
+  const calcTypeLabel = document.querySelector("#calc-type")
   const obj = {}
   obj['system'] = {}
 
   if (toggleCalcMethodBtn.checked === true) {
     obj['system']['calcMethod'] = 'timeBased'
+    calcTypeLabel.innerText = "Time based calculation"
   } else {
     obj['system']['calcMethod'] = 'tokenBased'
+    calcTypeLabel.innerText = "Token based calculation"
   }
 
   saveToStorage(obj).then((r) => {
@@ -103,4 +106,5 @@ resetConfigBtn.addEventListener('mouseup', resetConfig)
 const toggleCalcMethodBtn = document.querySelector('#enable-time-based-calc')
 toggleCalcMethodBtn.addEventListener('click', toggleCalcMethod)
 
+toggleCalcMethod()
 displayConfig()

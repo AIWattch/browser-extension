@@ -36,3 +36,9 @@
 .config-btn {
   width: 100%;
 }
+
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+}
