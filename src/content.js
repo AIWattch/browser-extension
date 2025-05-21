@@ -57,6 +57,7 @@ const observer = new MutationObserver((mutationsList, observer) => {
               const initialPhase = firstTokenTime - startTime;
               const streamingPhase = lastTokenTime - firstTokenTime;
               const compTime = streamingPhase + (initialPhase * r.networkLatency.value)
+              // console.log(`${streamingPhase} + ${initialPhase} * ${r.networkLatency.value}`)
 
               if (allNodes.length !== 0) {
                 const outputNode = allNodes[allNodes.length - 1];
@@ -261,6 +262,9 @@ function updateUI(obj) {
         statsElem.textContent += `🚗 Your AI drive: ${calcMiles} miles\r\n`
       }
 
+      const reviewLink = "https://chromewebstore.google.com/detail/ai-wattch/meacendfnhnjbkmfbfogbmekkhnamffn/reviews"
+      statsElem.innerHTML += `\r\n💚 Like AIWattch? <a target="_blank" href="${reviewLink}">Leave a review</a>`
+
       const checkResetBtn = document.querySelector('.reset-btn')
 
       const checkCalcMethodIcon = document.querySelector('.calc-method-indicator')
@@ -389,7 +393,7 @@ const initConfig = function(value) {
               label: 'Utilization Factor'
             }
             obj['config']['networkLatency'] = {
-              value: 30,
+              value: .1,
               unit: '%',
               label: 'Network Latency'
             }
