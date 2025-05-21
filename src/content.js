@@ -6,7 +6,7 @@ let hasStarted = false
 let startTime, firstTokenTime, lastTokenTime
 
 function setStartTime() {
-  startTime = Date.now()
+  startTime = Date.now() / 10000
 
   // Slight delay to not trigger the final time-based calc step
   setTimeout(() => {
@@ -38,7 +38,7 @@ const observer = new MutationObserver((mutationsList, observer) => {
         }
 
         if (typeof e.className === "string" && e.hasAttributes() && e.getAttribute("data-message-author-role") === "assistant") {
-          firstTokenTime = Date.now()
+          firstTokenTime = Date.now() / 10000
         }
 
         // Wait until the "submit" button is available again
@@ -50,14 +50,13 @@ const observer = new MutationObserver((mutationsList, observer) => {
           if (e.children[0] && e.children[0].getAttribute("data-state") === "closed") {
 
             const allNodes = document.querySelectorAll('article');
-            lastTokenTime = Date.now()
+            lastTokenTime = Date.now() / 10000
 
             // Calculate timestamp math
             getStorage('config').then((r) => {
               const initialPhase = firstTokenTime - startTime;
               const streamingPhase = lastTokenTime - firstTokenTime;
-              const compTime = streamingPhase + initialPhase * r.networkLatency.value;
-              // });
+              const compTime = streamingPhase + (initialPhase * r.networkLatency.value)
 
               if (allNodes.length !== 0) {
                 const outputNode = allNodes[allNodes.length - 1];
@@ -250,7 +249,7 @@ function updateUI(obj) {
 
     getStorage('system').then((r) => {
       if (r.calcMethod === "timeBased") {
-        statsElem.textContent = `Computation time: ${obj.compTime} \r\n`
+        statsElem.textContent = `Computation time: ${obj.compTime.toString().substring(0,4)} seconds\r\n`
         statsElem.textContent += `Total emissions: ${obj.timeEmissions.toString().substring(0,6)} kgCO2e\r\n`
         const calcMiles = (obj.timeEmissions / 400).toString().substring(0,4)
         statsElem.textContent += `🚗 Your AI drive: ${calcMiles} miles\r\n`
@@ -385,7 +384,7 @@ const initConfig = function(value) {
               label: 'Base Power'
             },
             obj['config']['utilizationFactor'] = {
-              value: 30,
+              value: 10,
               unit: '%',
               label: 'Utilization Factor'
             }
