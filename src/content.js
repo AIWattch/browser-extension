@@ -3,6 +3,7 @@ import {getStorage, saveToStorage} from "./storage"
 
 // Init time-based variables
 let hasStarted = false
+let genImage = false
 let startTime, firstTokenTime, lastTokenTime
 
 function setStartTime() {
@@ -19,6 +20,15 @@ const observer = new MutationObserver((mutationsList, observer) => {
   for (const mutation of mutationsList) {
     if (mutation.type === 'childList') {
       mutation.addedNodes.forEach((e) => {
+
+        if (!genImage && e.innerText && e.innerText.includes("Processing image")) {
+          genImage = true
+          console.log("Images not supported yet")
+        }
+
+        if (typeof e.className === "string" && e.hasAttributes() && e.getAttribute("aria-label") === "Generated image") {
+          genImage = false
+        }
 
         // Check if user presses Enter key within text prompt field
         if (typeof e.className === "string" && e.hasAttributes() && e.getAttribute("id") === "prompt-textarea") {
@@ -44,10 +54,10 @@ const observer = new MutationObserver((mutationsList, observer) => {
         // Wait until the "submit" button is available again
         if (hasStarted && typeof e.className === "string" && e.hasAttributes() && e.getAttribute("data-testid") === "composer-speech-button-container") {
 
-          hasStarted = false;
+          hasStarted = false
 
           // Check if "submit" button internal state has changed - this tells us the response has finished
-          if (e.children[0] && e.children[0].getAttribute("data-state") === "closed") {
+          if (!genImage && e.children[0] && e.children[0].getAttribute("data-state") === "closed") {
 
             const allNodes = document.querySelectorAll('article');
             lastTokenTime = Date.now() / 10000
