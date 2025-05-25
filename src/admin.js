@@ -36,16 +36,15 @@ function displayConfig() {
       }
     })
 
-  // getStorage('system').then((obj) => {
-  //   if (obj.calcMethod === "timeBased") {
-  //     toggleCalcMethodBtn.checked = true
-  //     console.log('enabledlled')
-  //   } else {
-  //     toggleCalcMethodBtn.checked = false
-  //   }
-  // }).catch((err) => {
-  //     console.error(err)
-  //   })
+  getStorage('system').then((obj) => {
+    if (obj.calcMethod === "timeBased") {
+      toggleCalcSelect.value = "time-based"
+    } else {
+      toggleCalcSelect.value = "token-based"
+    }
+  }).catch((err) => {
+      console.error(err)
+    })
 }
 
 function updateConfig() {
@@ -102,5 +101,4 @@ resetConfigBtn.addEventListener('mouseup', resetConfig)
 const toggleCalcSelect = document.querySelector('#calc-type')
 toggleCalcSelect.addEventListener('change', toggleCalcMethod)
 
-toggleCalcMethod()
 displayConfig()
