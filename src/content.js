@@ -263,7 +263,7 @@ function updateUI(obj) {
       }
 
       const reviewLink = "https://chromewebstore.google.com/detail/ai-wattch/meacendfnhnjbkmfbfogbmekkhnamffn/reviews"
-      statsElem.innerHTML += `\r\n💚 Like AIWattch? <a target="_blank" href="${reviewLink}">Leave a review</a>`
+      statsElem.innerHTML += `\r\n💚 AIWattch? <a target="_blank" href="${reviewLink}">Leave a review</a>`
 
       const checkResetBtn = document.querySelector('.reset-btn')
 

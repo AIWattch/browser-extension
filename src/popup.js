@@ -8,7 +8,7 @@ function showUserStats() {
   getStorage('system').then((r) => {
     getStorage('user').then((obj) => {
       if (r.calcMethod === "timeBased") {
-        statsElem.textContent = `Computation time: ${obj.compTime} \r\n`
+        statsElem.textContent = `Computation time: ${obj.compTime.toString().substring(0,4)} seconds\r\n`
         statsElem.textContent += `Total emissions: ${obj.timeEmissions.toString().substring(0,6)} kgCO2e\r\n`
       } else {
         const calcMiles = (obj.totalEmissions / 400).toString().substring(0,4)
