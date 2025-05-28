@@ -17,6 +17,7 @@
   padding: 1em;
   border-radius: 6px;
   width: fit-content;
+  min-width: 400px;
 }
 
 .config-container {
