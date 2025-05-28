@@ -370,42 +370,50 @@ const initConfig = function(value) {
             obj['config']['charsPerToken'] = {
               value: 4,
               unit: '',
-              label: 'Characters Per Token'
+              label: 'Characters Per Token',
+              calcType: 'tokenBased'
             }
             obj['config']['gridFactor'] = {
               value: 383,
               unit: 'gCO2e/kWh',
-              label: 'Grid Factor' 
+              label: 'Grid Factor',
+              calcType: 'all'
             }
             obj['config']['inputFactor'] = {
               value: 0.000002,
               unit: 'kWh/token',
-              label: 'Input Token Factor'
+              label: 'Input Token Factor',
+              calcType: 'tokenBased'
             }
             obj['config']['outputFactor'] = {
               value: 0.00001,
               unit: 'kWh/token',
-              label: 'Output Token Factor'
+              label: 'Output Token Factor',
+              calcType: 'tokenBased'
             }
             obj['config']['PUE'] = {
               value: 1.1,
               unit: '',
-              label: 'Power Usage Efficiency'
+              label: 'Power Usage Efficiency',
+              calcType: 'all'
             },
             obj['config']['basePower'] = {
               value: 350,
               unit: 'W',
-              label: 'Base Power'
+              label: 'GPU Base Power',
+              calcType: 'timeBased'
             },
             obj['config']['utilizationFactor'] = {
               value: 10,
               unit: '%',
-              label: 'GPU Utilization'
+              label: 'GPU Utilization',
+              calcType: 'timeBased'
             }
             obj['config']['networkLatency'] = {
               value: .1,
               unit: '%',
-              label: 'Network Latency'
+              label: 'Network Latency',
+              calcType: 'timeBased'
             }
           } else if (value === 'ui') {
             obj['ui'] = {}

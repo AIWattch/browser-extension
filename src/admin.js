@@ -2,6 +2,19 @@ import "./admin.css"
 import {getStorage, saveToStorage} from "./storage"
 import {doInitConfig} from "./content"
 
+function setOptionsVisible(calcType) {
+
+  const allConfigItems = document.querySelectorAll('.config-container')
+
+  allConfigItems.forEach((item) => {
+    if (item.classList.toString().includes(calcType) || (item.classList.toString().includes('all'))) {
+      item.style.display = 'flex'
+    } else {
+      item.style.display = 'none'
+    }
+  })
+}
+
 function displayConfig() {
   getStorage('config').then((obj) => {
     const mainDiv = document.querySelector('.main')
@@ -11,6 +24,7 @@ function displayConfig() {
     for (let [key, value] of Object.entries(obj)) {
       const container = document.createElement('div')
       container.className = 'config-container'
+      container.classList.add(value.calcType)
 
       const itemValue = value.value
       const item = document.createElement('span')
@@ -27,6 +41,10 @@ function displayConfig() {
       container.appendChild(configValue)
 
       mainDiv.appendChild(container)
+
+      if (value.calcType !== 'all') {
+        container.style.display = 'none'
+      }
     }
   }).catch((err) => {
       if (err === 'emptyKey') {
@@ -42,9 +60,12 @@ function displayConfig() {
     } else {
       toggleCalcSelect.value = "token-based"
     }
+
+    setOptionsVisible(obj.calcMethod)
   }).catch((err) => {
       console.error(err)
     })
+
 }
 
 function updateConfig() {
@@ -82,8 +103,10 @@ function toggleCalcMethod() {
 
   if (toggleCalcSelect.value === "time-based") {
     obj['system']['calcMethod'] = 'timeBased'
+    setOptionsVisible('timeBased')
   } else {
     obj['system']['calcMethod'] = 'tokenBased'
+    setOptionsVisible('tokenBased')
   }
 
   saveToStorage(obj).then((r) => {
