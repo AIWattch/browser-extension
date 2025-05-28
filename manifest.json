@@ -18,6 +18,9 @@
     "64": "assets/icons/icon64.png",
     "128": "assets/icons/icon128.png"
   },
+    "background": {
+    "service_worker": "src/background.js"
+  },
   "content_scripts": [
     {
       "run_at" : "document_idle",
@@ -30,7 +33,8 @@
     "resources": ["assets/*", "src/how-does-it-work.html", "src/admin.*"]
   }],
   "permissions": [
-    "storage"
+    "storage",
+    "tabs"
   ],
   "host_permissions": [
     "https://chatgpt.com/*"

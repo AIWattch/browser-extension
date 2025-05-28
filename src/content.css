@@ -32,6 +32,7 @@ html.light {
   display: flex;
   position: absolute;
   width: fit-content;
+  gap: 1em;
   border-radius: 6px; 
   padding: 6px 16px;
   font-size: .875rem;
@@ -42,9 +43,24 @@ html.light {
     white-space: pre-line;
   }
 
+  .reset-container {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
+  }
+
   .reset-btn {
     height: 16px;
     width: 16px;
     cursor: pointer;
+    margin-top: 4px;
+  }
+
+  .calc-method-indicator {
+    font-size: 16px;
+  }
+
+  a {
+    color: #8BD3E6;
   }
 }

@@ -1,5 +1,19 @@
-import "./content.css";
-import {getStorage, saveToStorage} from "./storage";
+import "./content.css"
+import {getStorage, saveToStorage} from "./storage"
+
+// Init time-based variables
+let hasStarted = false
+let genImage = false
+let startTime, firstTokenTime, lastTokenTime
+
+function setStartTime() {
+  startTime = Date.now() / 10000
+
+  // Slight delay to not trigger the final time-based calc step
+  setTimeout(() => {
+    hasStarted = true
+  }, 100)
+}
 
 // Wait for any DOM element to be changed
 const observer = new MutationObserver((mutationsList, observer) => {
@@ -7,29 +21,66 @@ const observer = new MutationObserver((mutationsList, observer) => {
     if (mutation.type === 'childList') {
       mutation.addedNodes.forEach((e) => {
 
-        // if (e.nodeType === 3 && e.nodeValue === "ChatGPT is generating a response...") {
-        //   console.log("RESPONSE START");
-        // }
+        if (!genImage && e.innerText && e.innerText.includes("Processing image")) {
+          genImage = true
+          console.log("Images not supported yet")
+        }
+
+        if (typeof e.className === "string" && e.hasAttributes() && e.getAttribute("aria-label") === "Generated image") {
+          genImage = false
+        }
+
+        // Check if user presses Enter key within text prompt field
+        if (typeof e.className === "string" && e.hasAttributes() && e.getAttribute("id") === "prompt-textarea") {
+          e.addEventListener("keydown", (key) => {
+            if (key.code === "Enter") {
+              setStartTime()
+            }
+          })
+        }
+
+        // Check if user clicks on "send prompt" button
+        if (typeof e.className === "string" && e.hasAttributes() && e.getAttribute("data-testid") === "send-button") {
+
+          e.addEventListener("click", () => {
+            setStartTime()
+          })
+        }
+
+        if (typeof e.className === "string" && e.hasAttributes() && e.getAttribute("data-message-author-role") === "assistant") {
+          firstTokenTime = Date.now() / 10000
+        }
 
         // Wait until the "submit" button is available again
-        if (typeof e.className === "string" && e.hasAttributes() && e.getAttribute("data-testid") === "composer-speech-button-container") {
+        if (hasStarted && typeof e.className === "string" && e.hasAttributes() && e.getAttribute("data-testid") === "composer-speech-button-container") {
+
+          hasStarted = false
 
           // Check if "submit" button internal state has changed - this tells us the response has finished
-          if (e.children[0] && e.children[0].getAttribute("data-state") === "closed") {
+          if (!genImage && e.children[0] && e.children[0].getAttribute("data-state") === "closed") {
 
             const allNodes = document.querySelectorAll('article');
+            lastTokenTime = Date.now() / 10000
 
-            if (allNodes.length !== 0) {
-              const outputNode = allNodes[allNodes.length - 1];
+            // Calculate timestamp math
+            getStorage('config').then((r) => {
+              const initialPhase = firstTokenTime - startTime;
+              const streamingPhase = lastTokenTime - firstTokenTime;
+              const compTime = streamingPhase + (initialPhase * r.networkLatency.value)
+              // console.log(`${streamingPhase} + ${initialPhase} * ${r.networkLatency.value}`)
 
-              const outputText = outputNode.innerText.replace("ChatGPT said:","");
-              const inputText = allNodes[allNodes.length - 2];
-              const textNodes = [];
-              textNodes.push({'type': 'inputTokens', 'content': inputText.innerText});
-              textNodes.push({'type': 'outputTokens', 'content': outputText});
+              if (allNodes.length !== 0) {
+                const outputNode = allNodes[allNodes.length - 1];
 
-              outputFinished(textNodes)
-            }
+                const outputText = outputNode.innerText.replace("ChatGPT said:","");
+                const inputText = allNodes[allNodes.length - 2];
+                const textNodes = [];
+                textNodes.push({'type': 'inputTokens', 'content': inputText.innerText});
+                textNodes.push({'type': 'outputTokens', 'content': outputText});
+
+                outputFinished(textNodes, compTime)
+              }
+            });
           }
         }
       })
@@ -39,7 +90,7 @@ const observer = new MutationObserver((mutationsList, observer) => {
 
 observer.observe(document.body, { childList: true, subtree: true })
 
-function outputFinished(textNodes) {
+function outputFinished(textNodes, compTime) {
   console.log('ChatGPT output finished')
 
   // Calculate both input/output token count
@@ -51,26 +102,72 @@ function outputFinished(textNodes) {
 
   // Combine both token ammounts in to one object
   Promise.all(allTokens).then((res) => {
-    let obj = {}
+    let mergedTokens = {}
     res.forEach((r) => {
       let objName = Object.keys(r)[0]
       let objValue = Object.values(r)[0]
-      obj[objName] = objValue
+      mergedTokens[objName] = objValue
     })
 
-    // Make all emission based calculations
-    calcEmissions(obj).then((res) => {
-      return res
-    }).then((r) => {
-        saveToStorage({'user' : r})
-        return r
-      }).then((r) => {
-        updateUI(r)
-      })
+    getStorage('system').then((r) => {
+      // Determine which calculation method to use
+      if (r.calcMethod === "timeBased") {
+        // Make all time based calculations
+        calcTime(compTime)
+          .then((energyUsed) => calcTimeEmissions(energyUsed))
+          .then((timeEmissions) => sumTimeEmissions(compTime, timeEmissions))
+          .then((sumTimes) => {
+            saveToStorage({'user': sumTimes})
+            return sumTimes
+          }).then((r) => {
+            updateUI(r)
+          })
+      } else {
+        // Make all token based calculations
+        getStorage('user')
+          .then((obj) => calcEmissions(mergedTokens, obj))
+          .then((res) => {
+            return res
+          }).then((r) => {
+            saveToStorage({'user' : r})
+            return r
+          }).then((r) => {
+            updateUI(r)
+          })
+      }
+    })
 
   }).catch((err) => {
       console.error(err)
     })
+}
+//
+const calcTime = function(compTime) {
+  return new Promise(function (resolve, reject) {
+    getStorage('config').then((r) => {
+      const totalEnergy = r.basePower.value * r.utilizationFactor.value * compTime * r.PUE.value / 3600000
+      resolve(totalEnergy)
+    })
+  })
+}
+
+const calcTimeEmissions = function(energyUsed) {
+  return new Promise(function (resolve, reject) {
+    getStorage('config').then((r) => {
+      const timeEmissions = energyUsed * r.gridFactor.value / 1000
+      resolve(timeEmissions)
+    })
+  })
+}
+
+const sumTimeEmissions = function(compTime, timeEmissions) {
+  return new Promise(function (resolve, reject) {
+    getStorage('user').then((obj) => {
+      obj['compTime'] = obj.compTime + compTime
+      obj['timeEmissions'] = obj.timeEmissions + timeEmissions
+      resolve(obj)
+    })
+  })
 }
 
 const calcTokens = function(textNode) {
@@ -95,15 +192,14 @@ const calcTokens = function(textNode) {
   })
 }
 
-const calcEmissions = function(obj) {
+const calcEmissions = function(tokenObj, obj) {
   return new Promise(function (resolve, reject) {
 
-    const inputTokens = obj["inputTokens"]
-    const outputTokens = obj["outputTokens"]
+    Object.assign(obj, tokenObj)
 
     // Equations for emission calculations
     getStorage('config').then((r) => {
-      const totalEnergy = (inputTokens * r.inputFactor.value + outputTokens * r.outputFactor.value) * r.PUE.value
+      const totalEnergy = (tokenObj["inputTokens"] * r.inputFactor.value + tokenObj["outputTokens"] * r.outputFactor.value) * r.PUE.value
       const totalEmissions = totalEnergy * r.gridFactor.value
       return totalEmissions
     }).then((r) => {
@@ -162,38 +258,69 @@ function updateUI(obj) {
 
     handleMouse(parentDiv)
 
-    const calcMiles = (obj.totalEmissions / 400).toString().substring(0,4)
+    getStorage('system').then((r) => {
+      if (r.calcMethod === "timeBased") {
+        statsElem.textContent = `Computation time: ${obj.compTime.toString().substring(0,4)} seconds\r\n`
+        statsElem.textContent += `Total emissions: ${obj.timeEmissions.toString().substring(0,6)} kgCO2e\r\n`
+        const calcMiles = (obj.timeEmissions / 400).toString().substring(0,4)
+        statsElem.textContent += `🚗 Your AI drive: ${calcMiles} miles\r\n`
+      } else {
+        const calcMiles = (obj.totalEmissions / 400).toString().substring(0,4)
+        statsElem.textContent = `Input tokens: ${obj.inputTokens} \r\n`
+        statsElem.textContent += `Output tokens: ${obj.outputTokens} \r\n`
+        statsElem.textContent += `Total emissions: ${obj.totalEmissions.toString().substring(0,6)} gCO2e \r\n`
+        statsElem.textContent += `🚗 Your AI drive: ${calcMiles} miles\r\n`
+      }
 
-    statsElem.textContent = `Input tokens: ${obj.inputTokens} \r\n`
-    statsElem.textContent += `Output tokens: ${obj.outputTokens} \r\n`
-    statsElem.textContent += `Total emissions: ${obj.totalEmissions.toString().substring(0,6)} gCO2e \r\n`
-    statsElem.textContent += `🚗 Your AI drive: ${calcMiles} miles\r\n`
+      const reviewLink = "https://chromewebstore.google.com/detail/ai-wattch/meacendfnhnjbkmfbfogbmekkhnamffn/reviews"
+      statsElem.innerHTML += `\r\n💚 AIWattch? <a target="_blank" href="${reviewLink}">Leave a review</a>`
 
-    const checkResetBtn = document.querySelector('.reset-btn')
+      const checkResetBtn = document.querySelector('.reset-btn')
 
-    // Reset user data to zero with 'Reset button'
-    if (!checkResetBtn) {
-      const resetBtn = document.createElement('img')
-      resetBtn.className = 'reset-btn'
-      resetBtn.src = chrome.runtime.getURL('../assets/reset.svg')
+      const checkCalcMethodIcon = document.querySelector('.calc-method-indicator')
 
-      resetBtn.addEventListener('mouseup', function(e) {
-        const obj = {}
-        obj['user'] = {}
-        obj['user']['inputTokens'] = 0
-        obj['user']['outputTokens'] = 0
-        obj['user']['totalEmissions'] = 0
+      if (checkCalcMethodIcon) {
+        const calcMethodIcon = document.querySelector('.calc-method-indicator')
+        calcMethodIcon.textContent = (r.calcMethod === "timeBased") ? '🕑' : '🪙'
+      }
 
-        saveToStorage(obj).then((s) => {
-          console.log('cleared storage OK')
-          updateUI(obj.user)
-        }).catch((err) => {
-            console.log(err)
-          })
-      }, true)
+      // Reset user data to zero with 'Reset button'
+      if (!checkResetBtn) {
+        const resetContainer = document.createElement('div')
+        resetContainer.className = 'reset-container'
+        const resetBtn = document.createElement('img')
+        resetBtn.className = 'reset-btn'
+        resetBtn.src = chrome.runtime.getURL('../assets/reset.svg')
 
-      parentDiv.appendChild(resetBtn)
-    }
+        const calcMethodIcon = document.createElement('span')
+        calcMethodIcon.className = 'calc-method-indicator'
+        calcMethodIcon.textContent = (r.calcMethod === "timeBased") ? '🕑' : '🪙'
+
+        resetContainer.appendChild(calcMethodIcon)
+        resetContainer.appendChild(resetBtn)
+
+        resetBtn.addEventListener('mouseup', function(e) {
+          const obj = {}
+          obj['user'] = {}
+          obj['user']['inputTokens'] = 0
+          obj['user']['outputTokens'] = 0
+          obj['user']['totalEmissions'] = 0
+          obj['user']['compTime'] = 0
+          obj['user']['timeEmissions'] = 0
+          obj['system'] = {}
+          obj['system']['calcMethod'] = 'tokenBased'
+
+          saveToStorage(obj).then((s) => {
+            console.log('cleared storage OK')
+            updateUI(obj.user)
+          }).catch((err) => {
+              console.log(err)
+            })
+        }, true)
+
+        parentDiv.appendChild(resetContainer)
+      }
+    })
   })
 }
 
@@ -236,32 +363,57 @@ const initConfig = function(value) {
             obj['user']['inputTokens'] = 0
             obj['user']['outputTokens'] = 0
             obj['user']['totalEmissions'] = 0
+            obj['user']['compTime'] = 0
+            obj['user']['timeEmissions'] = 0
           } else if (value === 'config') {
             obj['config'] = {}
             obj['config']['charsPerToken'] = {
               value: 4,
               unit: '',
-              label: 'Characters Per Token'
+              label: 'Characters Per Token',
+              calcType: 'tokenBased'
             }
             obj['config']['gridFactor'] = {
               value: 383,
               unit: 'gCO2e/kWh',
-              label: 'Grid Factor' 
+              label: 'Grid Factor',
+              calcType: 'all'
             }
             obj['config']['inputFactor'] = {
               value: 0.000002,
               unit: 'kWh/token',
-              label: 'Input Token Factor'
+              label: 'Input Token Factor',
+              calcType: 'tokenBased'
             }
             obj['config']['outputFactor'] = {
               value: 0.00001,
               unit: 'kWh/token',
-              label: 'Output Token Factor'
+              label: 'Output Token Factor',
+              calcType: 'tokenBased'
             }
             obj['config']['PUE'] = {
-              value: 1.2,
+              value: 1.1,
               unit: '',
-              label: 'Power Usage Efficiency'
+              label: 'Power Usage Efficiency',
+              calcType: 'all'
+            },
+            obj['config']['basePower'] = {
+              value: 350,
+              unit: 'W',
+              label: 'GPU Base Power',
+              calcType: 'timeBased'
+            },
+            obj['config']['utilizationFactor'] = {
+              value: 10,
+              unit: '%',
+              label: 'GPU Utilization',
+              calcType: 'timeBased'
+            }
+            obj['config']['networkLatency'] = {
+              value: .1,
+              unit: '%',
+              label: 'Network Latency',
+              calcType: 'timeBased'
             }
           } else if (value === 'ui') {
             obj['ui'] = {}
@@ -270,6 +422,7 @@ const initConfig = function(value) {
           } else if (value === 'system') {
             obj['system'] = {}
             obj['system']['chromeVersion'] = getChromeVersion()
+            obj['system']['calcMethod'] = 'tokenBased'
           }
 
           saveToStorage(obj).then((s) => {
@@ -284,6 +437,15 @@ const initConfig = function(value) {
 }
 
 doInitConfig()
+
+// Get message from background script to update UI
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  if (msg.type === "updateConfig") {
+    getStorage('user').then((r) => {
+      updateUI(r)
+    })
+  }
+})
 
 // Handle drag/drop logic
 function handleMouse(div) {
