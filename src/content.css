@@ -59,6 +59,7 @@ html.light {
 
   .close-btn {
     cursor: pointer;
+    height: fit-content;
   }
 
   .calc-method-indicator {
