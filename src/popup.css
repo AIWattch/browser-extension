@@ -14,4 +14,9 @@
     color: blue;
     text-decoration: none;
   }
+
+  #show-popup {
+    font-weight: 700;
+    cursor: pointer;
+  }
 }

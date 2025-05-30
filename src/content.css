@@ -47,6 +47,7 @@ html.light {
     display: flex;
     flex-direction: row;
     gap: 0.5em;
+    font-size: 16px;
   }
 
   .reset-btn {
@@ -54,6 +55,10 @@ html.light {
     width: 16px;
     cursor: pointer;
     margin-top: 4px;
+  }
+
+  .close-btn {
+    cursor: pointer;
   }
 
   .calc-method-indicator {
