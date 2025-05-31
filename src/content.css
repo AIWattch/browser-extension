@@ -43,6 +43,7 @@ html.light {
   gap: 1em;
   border-radius: 6px; 
   padding: 6px 16px;
+  padding-right: 8px;
   font-size: .875rem;
   border: 1px solid;
   z-index: 999;
