@@ -13,10 +13,10 @@
   a {
     color: blue;
     text-decoration: none;
+    cursor: pointer;
   }
 
-  #show-popup {
-    cursor: pointer;
-    color: blue;
+  a:hover {
+    color: #00008B;
   }
 }
