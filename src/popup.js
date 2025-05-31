@@ -33,7 +33,7 @@ const showPopup = document.querySelector('#show-popup')
 getStorage('system').then((r) => {
   if (!r.showPopup) {
     showPopup.style.display = 'block'
-    showPopup.innerText = 'Click to show popup'
+    showPopup.innerText = '🔎 Display popup'
 
     showPopup.addEventListener('click', () => {
       getStorage('system').then((obj) => {

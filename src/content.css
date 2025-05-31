@@ -10,6 +10,10 @@ html.dark {
     .reset-btn {
       filter: brightness(0) invert(1);
     }
+
+    a {
+      color: #8BD3E6;
+    }
   }
 }
 
@@ -24,6 +28,10 @@ html.light {
 
     .reset-btn {
       filter: brightness(0) invert(0);
+    }
+
+    a {
+      color: blue;
     }
   }
 }
@@ -64,9 +72,5 @@ html.light {
 
   .calc-method-indicator {
     font-size: 16px;
-  }
-
-  a {
-    color: #8BD3E6;
   }
 }
