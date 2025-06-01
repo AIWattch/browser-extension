@@ -10,6 +10,10 @@ html.dark {
     .reset-btn {
       filter: brightness(0) invert(1);
     }
+
+    a {
+      color: #8BD3E6;
+    }
   }
 }
 
@@ -25,6 +29,10 @@ html.light {
     .reset-btn {
       filter: brightness(0) invert(0);
     }
+
+    a {
+      color: blue;
+    }
   }
 }
 
@@ -35,6 +43,7 @@ html.light {
   gap: 1em;
   border-radius: 6px; 
   padding: 6px 16px;
+  padding-right: 8px;
   font-size: .875rem;
   border: 1px solid;
   z-index: 999;
@@ -47,6 +56,7 @@ html.light {
     display: flex;
     flex-direction: row;
     gap: 0.5em;
+    font-size: 16px;
   }
 
   .reset-btn {
@@ -56,11 +66,12 @@ html.light {
     margin-top: 4px;
   }
 
-  .calc-method-indicator {
-    font-size: 16px;
+  .close-btn {
+    cursor: pointer;
+    height: fit-content;
   }
 
-  a {
-    color: #8BD3E6;
+  .calc-method-indicator {
+    font-size: 16px;
   }
 }

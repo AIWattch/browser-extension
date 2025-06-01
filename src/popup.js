@@ -29,6 +29,26 @@ function showUserStats() {
   })
 }
 
+const showPopup = document.querySelector('#show-popup')
+getStorage('system').then((r) => {
+  if (!r.showPopup) {
+    showPopup.style.display = 'block'
+    showPopup.innerText = '🚀 Display popup'
+
+    showPopup.addEventListener('click', () => {
+      getStorage('system').then((obj) => {
+        obj.showPopup = true
+        saveToStorage({'system': obj})
+      })
+
+      chrome.runtime.sendMessage({ type: 'updateConfig' })
+      showPopup.style.display = 'none'
+    })
+  } else {
+    showPopup.style.display = 'none'
+  }
+})
+
 const infoBtn = document.querySelector('#more-info')
 infoBtn.href = chrome.runtime.getURL('./src/how-does-it-work.html')
 

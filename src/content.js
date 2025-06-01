@@ -213,26 +213,30 @@ const calcEmissions = function(tokenObj, obj) {
 const getUI = function() {
   return new Promise(function (resolve, reject) {
 
-    const parentId = "user-stats"
-    const parentExists = document.querySelector(`#${parentId}`)
+    getStorage('system').then((r) => {
+      const parentId = "user-stats"
+      const parentExists = document.querySelector(`#${parentId}`)
 
-    if (parentExists) {
-      const statsElem = parentExists.querySelector('span')
+      if (parentExists) {
+        const statsElem = parentExists.querySelector('span')
+        parentExists.style.display = r.showPopup ? 'flex' : r.showPopup
 
-      resolve([parentExists, statsElem])
-    } else {
-      const parentDiv = document.createElement('div')
-      const statsElem = document.createElement('span')
-      parentDiv.id = parentId
-      parentDiv.insertAdjacentElement('afterbegin', statsElem)
+        resolve([parentExists, statsElem])
+      } else {
+        const parentDiv = document.createElement('div')
+        const statsElem = document.createElement('span')
+        parentDiv.id = parentId
+        parentDiv.insertAdjacentElement('afterbegin', statsElem)
+        parentDiv.style.display = !r.showPopup ? 'none' : r.showPopup
 
-      // Unsolved UI bug needs a short timeout here
-      setTimeout(() => {
-        document.body.insertAdjacentElement('afterbegin', parentDiv)
-      }, 100);
+        // Unsolved UI bug needs a short timeout here
+        setTimeout(() => {
+          document.body.insertAdjacentElement('afterbegin', parentDiv)
+        }, 100);
 
-      resolve([parentDiv, statsElem])
-    }
+        resolve([parentDiv, statsElem])
+      }
+    })
   })
 }
 
@@ -288,6 +292,7 @@ function updateUI(obj) {
       if (!checkResetBtn) {
         const resetContainer = document.createElement('div')
         resetContainer.className = 'reset-container'
+
         const resetBtn = document.createElement('img')
         resetBtn.className = 'reset-btn'
         resetBtn.src = chrome.runtime.getURL('../assets/reset.svg')
@@ -296,8 +301,23 @@ function updateUI(obj) {
         calcMethodIcon.className = 'calc-method-indicator'
         calcMethodIcon.textContent = (r.calcMethod === "timeBased") ? '🕑' : '🪙'
 
+        const closeBtn = document.createElement('span')
+        closeBtn.className = 'close-btn'
+        closeBtn.innerText = '❌'
+
+        closeBtn.addEventListener('click', () => {
+          const userStatsContainer = document.querySelector("#user-stats")
+          userStatsContainer.style.display = 'none'
+
+          getStorage('system').then((obj) => {
+            obj.showPopup = false
+            saveToStorage({'system': obj})
+          })
+        })
+
         resetContainer.appendChild(calcMethodIcon)
         resetContainer.appendChild(resetBtn)
+        resetContainer.appendChild(closeBtn)
 
         resetBtn.addEventListener('mouseup', function(e) {
           const obj = {}
@@ -309,6 +329,7 @@ function updateUI(obj) {
           obj['user']['timeEmissions'] = 0
           obj['system'] = {}
           obj['system']['calcMethod'] = 'tokenBased'
+          obj['system']['showPopup'] = true
 
           saveToStorage(obj).then((s) => {
             console.log('cleared storage OK')
@@ -325,6 +346,7 @@ function updateUI(obj) {
 }
 
 export const doInitConfig = function() {
+
   return new Promise(function (resolve, reject) {
     const allKeys = []
     const storageKeys = ['ui','config','user', 'system']
@@ -423,6 +445,7 @@ const initConfig = function(value) {
             obj['system'] = {}
             obj['system']['chromeVersion'] = getChromeVersion()
             obj['system']['calcMethod'] = 'tokenBased'
+            obj['system']['showPopup'] = true
           }
 
           saveToStorage(obj).then((s) => {
@@ -431,7 +454,7 @@ const initConfig = function(value) {
           })
         } else {
           console.error(err)
-        }
+          }
       })
   })
 }
