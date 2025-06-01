@@ -1,7 +1,7 @@
 {
   "name": "AI Wattch – Track ChatGPT’s Carbon Emissions",
   "description": "Estimate the carbon footprint of your ChatGPT usage in real-time — right in your browser.",
-  "version": "1.0.1",
+  "version": "1.5",
   "manifest_version": 3,
   "action": {
     "default_popup": "src/popup.html",
