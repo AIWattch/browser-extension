@@ -1,61 +1,268 @@
-<h1>How does it work?</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIWattch: How does it work?</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            font-weight: bold;
+        }
+        h3 {
+            color: #34495e;
+            margin-top: 25px;
+        }
+        h4 {
+            color: #555;
+            margin-top: 20px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        ol {
+            padding-left: 20px;
+        }
+        .formula {
+            background: #f8f9fa;
+            padding: 10px;
+            border-left: 4px solid #007bff;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .notice-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .notice-box h2 {
+            color: #856404;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>How does it work?</h1>
 
-AI Wattch is a Chrome extension that estimates and displays carbon emissions from ChatGPT conversations. The focus is on education and awareness about AI energy consumption.
+    <p>AIWattch is a Chrome extension that estimates and displays carbon emissions from ChatGPT conversations. The focus is on education and awareness about AI energy consumption.</p>
 
-<h2>Core Implementation</h2>
-<h3>Token Counting</h3>
-<li>Character-based token estimation</li>
-<li> Real-time conversation tracking</li>
-<li> Basic approximation (configurable chars/token ratio)</li>
+    <h2>Core Implementation</h2>
 
-<h3>Emissions Calculation</h3>
-Total Energy = (Input_Tokens * Input_Factor + Output_Tokens * Output_Factor) * PUE 
-<br/>
-Total Emissions = Total Energy * Grid_Factor
-<p>
+    <h3>Token based approach</h3>
 
-<h3>Configurable Parameters</h3>
+    <h4>Token Counting</h4>
+    <ul>
+        <li>Character-based token estimation</li>
+        <li>Real-time conversation tracking</li>
+        <li>Basic approximation (configurable chars/token ratio)</li>
+    </ul>
 
-<b>1. Infrastructure</b>
-<li>PUE (datacenter <a href="https://en.wikipedia.org/wiki/Power_usage_effectiveness">Power Usage Effectiveness)</a></li>
-<li>Default: 1.125 - Range 1.0-2.0</li>
-<br/>
-<b>2. Energy Grid</b>
-<li>Grid Emissions Factor</li>
-<li>Default: 383 gCO2e/kWh</li>
-<li>Local: <a href="https://app.electricitymaps.com/map/72h">ElectricityMap</a></li>
-<br/>
-<b>3. Token Estimation</b>
-<li>Characters per Token</li>
-<li>Default: 4 chars/token - range (3-5)</li>
-<br/>
-<b>4. Energy Factors</b>
-<br/>
-<li>Input Token Energy (For context processing): Default: 0.002 Wh/token</li>
-<li>Output Token Energy (For generation processing): Default: 0.01 Wh/token</li>
-<p>
-<h2>Important Limitations</h2>
-<h3>Estimation Accuracy</h3>
-<li>Token count is based on character count approximation on web page using DOM method</li>
-<li>Cannot detect cached responses</li>
-<li>Simplified token energy estimations based on the <a href="https://huggingface.co/spaces/genai-impact/ecologits-calculator">ecologITs calculator</a></li>
-<br/>
-<h3>Scope Limitations</h3>
-<li>Only tracks simple text interactions</li>
-<li>Does not account for:</li>
-<li>Complex reasoning tasks (agentic)</li>
-<li>Multimodal processing</li>
-<li>Local model deployment</li>
-<li>Hardware lifecycle embodied carbon emissions</li>
-<li>Data center embodied carbon emissions</li>
-<h3>Technical Limitations</h3>
-<li>Basic token estimation</li>
-<li>Conservative energy calculations</li>
-<li>Limited to ChatGPT web interface</li>
-<li>Chrome browser only</li>
-<h3>Browser Compatibility</h3>
-<li>Chrome version tracking</li>
-<li>Minimum version requirements</li>
-<li>version compatibility logging</li>
-<h3>ChatGPT Interface compatibility</h3>
-<li>Version detection (logs)</li>
+    <h4>Emissions Calculation</h4>
+    <div class="formula">
+        Total Energy = (Input_Tokens × Input_Factor + Output_Tokens × Output_Factor) × PUE<br>
+        Total Emissions = Total Energy × Grid_Factor
+    </div>
+
+    <h4>Configurable Parameters</h4>
+    <ol>
+        <li><strong>Infrastructure</strong>
+            <ul>
+                <li>PUE (datacenter <a href="https://en.wikipedia.org/wiki/Power_usage_effectiveness">Power Usage Effectiveness</a>)</li>
+                <li>Default: 1.125 - Range 1.0-2.0</li>
+            </ul>
+        </li>
+        <li><strong>Energy Grid</strong>
+            <ul>
+                <li>Grid Emissions Factor</li>
+                <li>Default: 383 gCO2e/kWh</li>
+                <li>Local: <a href="https://app.electricitymaps.com/map/72h">ElectricityMap</a></li>
+            </ul>
+        </li>
+        <li><strong>Token Estimation</strong>
+            <ul>
+                <li>Characters per Token</li>
+                <li>Default: 4 chars/token - range (3-5)</li>
+            </ul>
+        </li>
+        <li><strong>Energy Factors</strong>
+            <ul>
+                <li>Input Token Energy (For context processing): Default: 0.001Wh/token</li>
+                <li>Output Token Energy (For generation processing): Default: 0.01Wh/token</li>
+            </ul>
+        </li>
+    </ol>
+
+    <h3>Time based approach</h3>
+
+    <h4>Emission Calculation:</h4>
+    <div class="formula">
+        Energy (kWh) = Base Power (W) × Utilization Factor × Computation Time (s) × PUE ÷ 3600000<br>
+        Emissions (kgCO2e) = Energy (kWh) × Emissions Factor (gCO2e/kWh) ÷ 1000
+    </div>
+
+    <h4>Time Measurement Process (Computation Time)</h4>
+    <ol>
+        <li>Capture three key timestamps:
+            <ul>
+                <li>T1: User submits query</li>
+                <li>T2: First token appears in response</li>
+                <li>T3: Last token appears (response complete)</li>
+            </ul>
+        </li>
+        <li>Calculate computation time:
+            <ul>
+                <li>Initial Phase = T2 - T1 (1-network latency factor)</li>
+                <li>Streaming Phase = T3 - T2 (primarily ongoing computation)</li>
+                <li><strong>Computation Time</strong> = (Streaming Phase) + (Initial Phase × (1-network latency factor))</li>
+            </ul>
+        </li>
+    </ol>
+
+    <h4>Configurable Parameters</h4>
+    <ul>
+        <li>GPU Base power values (W): default 350 W, <a href="https://www.nvidia.com/en-us/data-center/l40s/">max power output for Nvidia L40S</a>
+            <ul>
+                <li>GPU Utilization factor (% GPU utilization per query): default 10%</li>
+                <li>Network latency (% of computation time): default 10%. To be updated based on specific end user location.</li>
+                <li>PUE (Power Usage Efficiency)</li>
+                <li>Emissions factor</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h2>Important Limitations</h2>
+
+    <h3>Estimation Accuracy</h3>
+    <ul>
+        <li>Token count is based on character count approximation on web page using DOM method</li>
+        <li>Cannot detect cached responses</li>
+        <li>Simplified token energy estimations based on the <a href="https://huggingface.co/spaces/genai-impact/ecologits-calculator">ecologITs calculator</a></li>
+        <li>Time based calculation is based on estimated GPU power consumption and utilization factor. It does not take into account cluster size and distributed computing across a cluster.</li>
+    </ul>
+
+    <h3>Scope Limitations</h3>
+    <ul>
+        <li>Does not account for:
+            <ul>
+                <li>Multimodal processing</li>
+                <li>Local model deployment</li>
+                <li>Hardware lifecycle embodied carbon emissions</li>
+                <li>Data center embodied carbon emissions</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h3>Technical Limitations</h3>
+    <ul>
+        <li>Basic token estimation</li>
+        <li>Conservative energy calculations</li>
+        <li>Limited to ChatGPT web interface</li>
+        <li>Chrome browser only</li>
+    </ul>
+
+    <h3>Browser Compatibility</h3>
+    <ul>
+        <li>Chrome version tracking</li>
+        <li>Minimum version requirements</li>
+        <li>Version compatibility logging</li>
+    </ul>
+
+    <h3>ChatGPT Interface compatibility</h3>
+    <ul>
+        <li>Version per documentation.</li>
+    </ul>
+
+    <h2>Sources:</h2>
+    <p>Hugging Face LLM perf leaderboard: <a href="https://huggingface.co/spaces/optimum/llm-perf-leaderboard">https://huggingface.co/spaces/optimum/llm-perf-leaderboard</a></p>
+
+    <div class="notice-box">
+        <h2>Technology Evolution Notice</h2>
+        
+        <h3>Rapid Development of LLM Technology</h3>
+        <p>This extension's methodology reflects the state of LLM technology as of late 2024. The field is evolving rapidly in several directions:</p>
+
+        <h4>1. Model Architecture Changes</h4>
+        <ul>
+            <li>Multimodal models becoming standard</li>
+            <li>Reasoning-focused architectures</li>
+            <li>Local and edge deployment</li>
+            <li>Task-specialized models</li>
+            <li>Agent-based systems</li>
+        </ul>
+
+        <h4>2. Infrastructure Evolution</h4>
+        <ul>
+            <li>Distributed computing approaches</li>
+            <li>Edge-first deployments</li>
+            <li>Custom AI hardware</li>
+            <li>Novel cooling solutions</li>
+            <li>Hybrid processing strategies</li>
+        </ul>
+
+        <h4>3. Efficiency Improvements</h4>
+        <ul>
+            <li>Advanced model compression</li>
+            <li>Intelligent caching</li>
+            <li>Optimized inference</li>
+            <li>Specialized processors</li>
+            <li>Energy-aware routing</li>
+        </ul>
+
+        <h3>Impact on Emissions Calculation</h3>
+        <p>Our approach may need adaptation for:</p>
+        <ul>
+            <li>Multimodal processing</li>
+            <li>Local-edge hybrid systems</li>
+            <li>New efficiency metrics</li>
+            <li>Agent interactions</li>
+        </ul>
+
+        <h4>Commitment to Updates</h4>
+        <p>This project will:</p>
+        <ul>
+            <li>Track industry developments</li>
+            <li>Update calculation methods</li>
+            <li>Adapt to new architectures</li>
+            <li>Maintain transparency about limitations</li>
+            <li>Incorporate community feedback</li>
+        </ul>
+
+        <h4>Version History</h4>
+        <p>Each release will document:</p>
+        <ul>
+            <li>Updated assumptions</li>
+            <li>New calculation methods</li>
+            <li>Changed parameters</li>
+            <li>Source updates</li>
+        </ul>
+
+        <p>We encourage users to check for updates, review methodology changes, contribute insights and share use cases</p>
+    </div>
+</body>
+</html>
