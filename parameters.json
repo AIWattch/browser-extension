@@ -1,0 +1,24 @@
+{
+    "version": "1.0.0",
+    "updatedAt": "2025-06-07T14:00:00Z",
+    "config": {
+      "modelCost": {
+        "label": "Model Cost",
+        "value": "10",
+        "unit": "$ / 1M tokens",
+        "calcType": "tokenBased"
+      },
+      "timeCost": {
+        "label": "Time Cost",
+        "value": "20",
+        "unit": "$ / hour",
+        "calcType": "timeBased"
+      },
+      "VAT": {
+        "label": "VAT",
+        "value": "20",
+        "unit": "%",
+        "calcType": "all"
+      }
+    }
+  }
